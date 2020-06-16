@@ -1,0 +1,20 @@
+stages:
+  generate-metrics:
+    cmd: echo "metric" > scores.json
+    metrics:
+      - scores.json
+  copy_metrics:
+    cmd: cp scores.json scores2.json
+    deps:
+      - scores.json
+    metrics:
+      - scores2.json:
+          cache: false
+  copy_metrics3:
+    cmd: cat scores.json scores2.json > scores3.json
+    deps:
+      - scores.json
+      - scores2.json
+    metrics:
+      - scores3.json:
+          persist: false

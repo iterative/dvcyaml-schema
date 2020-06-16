@@ -1,0 +1,10 @@
+stages:
+  install:
+    cmd: >-
+      pip install --upgrade
+      jsonschema
+      hypothesis
+      hypothesis_jsonschema
+  tests:
+    cmd: ./tests.py
+    always_changed: true

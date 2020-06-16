@@ -1,0 +1,16 @@
+stages:
+  use-params_stage:
+    cmd: cat params.yaml > params2.yaml
+    params:
+      - auc
+      - loss
+    outs:
+      - params2.yaml
+  use-custom-params_file:
+    cmd: cat my_params.yaml > params2.yaml
+    params:
+      - my_params.yaml:
+          - auc
+          - loss
+    outs:
+      - params2.yaml

@@ -1,0 +1,22 @@
+stages:
+  stage_one:
+    cmd: python train.py input plots
+    deps:
+      - input
+    plots:
+      - plot1
+      - plot2:
+          cache: true
+      - plot3:
+          persist: true
+      - plot4:
+          persist: false
+          x: "2"
+      - plot5:
+          cache: false
+          y: epoch
+          y_label: Epochs
+          title: test run
+          template: confusion
+          x: auc
+          x_label: AUC
