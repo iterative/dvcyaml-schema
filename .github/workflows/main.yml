@@ -17,8 +17,7 @@ jobs:
       - name: Install DVC
         run: |
           python -m pip install --upgrade pip
-          pip install --upgrade "dvc>=1.0.0b3"
-      - name: Run Tests
+          pip install -r requirements.txt
+
+      - name: Generate schema, validate it's not stale, and verify
         run: dvc repro
-        env:
-          HYPOTHESIS_PROFILE: ci
