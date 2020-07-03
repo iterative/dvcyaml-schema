@@ -1,6 +1,6 @@
 # dvc-pipeline-schema
 
-[JSON Schema](https://json-schema.org/) for [`dvc.yaml`](https://dvc.org/doc/user-guide/dvc-file-format) file format.
+[JSON Schema](https://json-schema.org/) for [`dvc.yaml`](https://dvc.org/doc/user-guide/dvc-files-and-directories#dvcyaml-file) file format.
 
 It can provide better autocompletion, validation and linting for `dvc.yaml` files.
 
