@@ -34,14 +34,20 @@ Follow [this](https://www.jetbrains.com/help/ruby/yaml.html#remote_json) instruc
 
 
 ### Important Files:
-1. [schema.json](schema.json)
-2. [examples](examples)
-3. [tests.py](tests.py)
+1. **[schema.json](schema.json)**
+2. [gen.py](gen.py)
+3. [examples](examples)
+4. [tests.py](tests.py)
 
 
-### Running tests
-```console
-$ dvc repro
-```
+### Contributing
+
+1. Open [gen.py](gen.py) and make some adjustments.
+2. Generate schema and run tests:
+    ```console
+    $ dvc repro
+    ```
+3. Send us a pull request. 🤗
+
 
 > Make sure to create a virtual environment before, and `dvc` is installed.
