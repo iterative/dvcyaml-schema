@@ -1,4 +1,4 @@
-# dvc-pipeline-schema
+# dvcyaml-schema
 
 [JSON Schema](https://json-schema.org/) for [`dvc.yaml`](https://dvc.org/doc/user-guide/dvc-files-and-directories#dvcyaml-file) file format.
 
@@ -11,7 +11,7 @@ It can provide better autocompletion, validation and linting for `dvc.yaml` file
 Use the following URL for the up-to-date JSON schema for `dvc.yaml`:
 
 ```
-https://raw.githubusercontent.com/iterative/pipeline-schema/master/schema.json
+https://raw.githubusercontent.com/iterative/dvcyaml-schema/master/schema.json
 ```
 
 
@@ -22,7 +22,7 @@ Add the following to your settings:
 ```json
 {
   "yaml.schemas": {
-    "https://raw.githubusercontent.com/iterative/pipeline-schema/master/schema.json":
+    "https://raw.githubusercontent.com/iterative/dvcyaml-schema/master/schema.json":
         "dvc.yaml"
   }
 }
