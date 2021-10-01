@@ -7,7 +7,7 @@ from pathlib import Path
 
 import jsonschema
 
-from dvc.utils.yaml import load_yaml
+from dvc.utils.serialize import load_yaml
 
 schema = json.loads(
     (Path(__file__) / ".." / "schema.json").resolve().read_text()
