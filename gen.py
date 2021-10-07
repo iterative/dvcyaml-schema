@@ -83,14 +83,16 @@ class Plots(BaseModel):
     __root__: Set[Plot]
 
 
-class LiveFlags(PlotFlags):
+class LiveFlags(BaseModel):
     summary: bool = Field(
         True, description="Signals dvclive to dump latest metrics file"
     )
     html: bool = Field(
         True, description="Signals dvclive to produce training report"
     )
-
+    cache: Optional[bool] = Field(True, description="Cache output by DVC")
+    class Config:
+        extra = "forbid"
 
 class Live(BaseModel):
     __root__: Dict[FilePath, LiveFlags]
