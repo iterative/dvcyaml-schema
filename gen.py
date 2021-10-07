@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """schema.json generator."""
 
 # flake8: noqa: D1

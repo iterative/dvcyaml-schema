@@ -20,4 +20,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: Generate schema, validate it's not stale, and verify
-        run: dvc repro
+        run: |
+          ./gen.py | diff schema.json -
+          ./gen.py > schema.json
+          ./tests.py
+          dvc repro  # sanity check
