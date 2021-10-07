@@ -10,3 +10,11 @@ stages:
           cache: false
       - bar2:
           persist: true
+      - bar3:
+          checkpoint: true
+      - bar4:
+          desc: "bar4"
+    live:
+      foo:
+        summary: true
+        html: true

@@ -1,0 +1,34 @@
+stages:
+  test_dict:
+    foreach:
+      first: 1
+      second: 2
+      third: 3
+    do:
+      cmd: echo ${item.value}
+  test_seq:
+    foreach: [1, 2, 3]
+    do:
+      cmd: echo ${item}
+  test_nested_seq:
+    foreach:
+      - os: macos_latest
+        pyv: 3.6
+      - os: windows-latest
+        pyv: 3.7
+      - os: ubuntu-latest
+        pyv: 3.8
+    do:
+      cmd: "echo OS: ${item.os} ${item.pvy}"
+  test_variables:
+    foreach: ${vars}
+    do:
+      cmd: echo ${item}
+  test_nested:
+    foreach: ${nested.item}
+    do:
+      cmd: echo ${item}
+  test_index:
+    foreach: ${nested.item[index]}
+    do:
+      cmd: echo ${item}
