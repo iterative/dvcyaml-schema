@@ -10,14 +10,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
+      - name: Set up Python 3.9
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: "3.9"
       - name: Install DVC
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Generate schema, validate it's not stale, and verify
-        run: dvc repro
+        run: |
+          ./gen.py | diff schema.json -
+          ./gen.py > schema.json
+          ./tests.py
+          dvc repro  # sanity check

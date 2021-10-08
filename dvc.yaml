@@ -1,11 +1,11 @@
 stages:
   check_updated:
     # check that generated file and the one in repo are same
-    cmd: python gen.py | diff schema.json -
+    cmd: ./gen.py | diff schema.json -
     deps:
       - schema.json
   generate:
-    cmd: python gen.py > schema.json
+    cmd: ./gen.py > schema.json
     deps:
       - gen.py
     outs:

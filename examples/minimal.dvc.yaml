@@ -1,3 +1,7 @@
 stages:
   stage1:
     cmd: echo foo
+  stage2:
+    cmd:
+      - echo hello
+      - echo world

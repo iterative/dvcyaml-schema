@@ -6,7 +6,6 @@ from functools import partial
 from pathlib import Path
 
 import jsonschema
-
 from dvc.utils.serialize import load_yaml
 
 schema = json.loads(
