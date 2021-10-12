@@ -16,7 +16,10 @@ https://raw.githubusercontent.com/iterative/dvcyaml-schema/master/schema.json
 
 #### Visual Studio Code (with [YAML Extension](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml)):
 
-Add the following to your settings:
+If you have installed YAML extension, it'll automatically fetch the latest dvcyaml-schema, and
+should work out of the box.
+
+But you can specify explicitly as well by adding following contents to your settings:
 
 ```json
 {
@@ -26,6 +29,8 @@ Add the following to your settings:
   }
 }
 ```
+
+You can also specify custom URL or path instead for debugging/testing purposes.
 
 #### JetBrain IDEs (PyCharm, Intellij IDEA, et al.)
 
