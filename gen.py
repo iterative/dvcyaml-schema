@@ -83,7 +83,7 @@ class Plots(BaseModel):
     __root__: Set[Plot]
 
 
-class LiveFlags(BaseModel):
+class LiveFlags(PlotFlags):
     summary: bool = Field(
         True, description="Signals dvclive to dump latest metrics file"
     )
