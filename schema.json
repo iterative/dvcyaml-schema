@@ -231,6 +231,65 @@
       "title": "LiveFlags",
       "type": "object",
       "properties": {
+        "cache": {
+          "title": "Cache",
+          "description": "Cache output by DVC",
+          "default": true,
+          "type": "boolean"
+        },
+        "persist": {
+          "title": "Persist",
+          "description": "Persist output between runs",
+          "default": false,
+          "type": "boolean"
+        },
+        "checkpoint": {
+          "title": "Checkpoint",
+          "description": "Indicate that the output is associated with in-code checkpoints",
+          "default": false,
+          "type": "boolean"
+        },
+        "desc": {
+          "title": "Description",
+          "description": "User description for the output",
+          "type": "string"
+        },
+        "x": {
+          "title": "X",
+          "description": "Default field name to use as x-axis data",
+          "type": "string"
+        },
+        "y": {
+          "title": "Y",
+          "description": "Default field name to use as y-axis data",
+          "type": "string"
+        },
+        "x_label": {
+          "title": "X Label",
+          "description": "Default label for the x-axis",
+          "type": "string"
+        },
+        "y_label": {
+          "title": "Y Label",
+          "description": "Default label for the y-axis",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "description": "Default plot title",
+          "type": "string"
+        },
+        "header": {
+          "title": "Header",
+          "description": "Whether the target CSV or TSV has a header or not",
+          "default": false,
+          "type": "boolean"
+        },
+        "template": {
+          "title": "Template",
+          "description": "Default plot template",
+          "type": "string"
+        },
         "summary": {
           "title": "Summary",
           "description": "Signals dvclive to dump latest metrics file",
@@ -240,12 +299,6 @@
         "html": {
           "title": "Html",
           "description": "Signals dvclive to produce training report",
-          "default": true,
-          "type": "boolean"
-        },
-        "cache": {
-          "title": "Cache",
-          "description": "Cache output by DVC",
           "default": true,
           "type": "boolean"
         }
