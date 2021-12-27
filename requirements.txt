@@ -1,3 +1,4 @@
 dvc>1
-pydantic>1,<2
 jsonschema
+pydantic>1,<2
+pytest

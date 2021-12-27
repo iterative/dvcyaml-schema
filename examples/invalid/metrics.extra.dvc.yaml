@@ -1,0 +1,7 @@
+stages:
+  generate-metrics:
+    cmd: echo "metric" > scores.json
+    metrics:
+      - scores.json:
+          cache: false
+          extra: false

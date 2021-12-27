@@ -1,0 +1,9 @@
+stages:
+  copy_multiple:
+    cmd: echo foo > foo
+    live:
+      foo:
+        summary: true
+        html: true
+        cache: false
+        extra: false

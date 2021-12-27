@@ -1,0 +1,10 @@
+stages:
+  test_dict:
+    foreach:
+      first: 1
+      second: 2
+      third: 3
+    do:
+      cmd: echo ${item.value}
+    else:
+      - foo

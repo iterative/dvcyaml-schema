@@ -116,7 +116,8 @@
           "description": "User description for the output",
           "type": "string"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "Out": {
       "title": "Out",
@@ -203,7 +204,8 @@
           "description": "Default plot template",
           "type": "string"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "Plot": {
       "title": "Plot",
@@ -424,7 +426,8 @@
       },
       "required": [
         "cmd"
-      ]
+      ],
+      "additionalProperties": false
     },
     "ForeachDo": {
       "title": "ForeachDo",
@@ -460,7 +463,8 @@
       "required": [
         "foreach",
         "do"
-      ]
+      ],
+      "additionalProperties": false
     }
   }
 }

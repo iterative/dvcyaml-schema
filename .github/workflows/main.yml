@@ -23,5 +23,5 @@ jobs:
         run: |
           ./gen.py | diff schema.json -
           ./gen.py > schema.json
-          ./tests.py
+          pytest -vv tests.py
           dvc repro  # sanity check

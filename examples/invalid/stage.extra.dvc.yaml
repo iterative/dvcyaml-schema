@@ -1,0 +1,8 @@
+stages:
+  stage1:
+    cmd: python train.py input output
+    deps:
+      - input
+    outs:
+      - output
+    extra: false
