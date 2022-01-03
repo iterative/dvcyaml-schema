@@ -48,7 +48,6 @@ class PlotFlags(OutFlags):
     template: FilePath = Field(None, description="Default plot template")
 
 
-
 class DepModel(BaseModel):
     __root__: FilePath = Field(..., description="A dependency for the stage")
 
