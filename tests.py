@@ -6,6 +6,7 @@ from functools import partial
 from pathlib import Path
 
 import jsonschema
+import pytest
 from dvc.utils.serialize import load_yaml
 
 schema = json.loads(
@@ -13,20 +14,21 @@ schema = json.loads(
 )
 validate_schema = partial(jsonschema.validate, schema=schema)
 
-
-def test_examples():
-    """Validate schema over examples."""
-    examples_dir = (Path(__file__) / ".." / "examples").resolve()
-    assert list(examples_dir.iterdir())
-
-    for example in examples_dir.iterdir():
-        try:
-            validate_schema(load_yaml(example))
-        except Exception:
-            print("Failed to validate:", example)
-            raise
-        print("Validated", example)
+VALID_DIR = (Path(__file__) / ".." / "examples" / "valid").resolve()
+INVALID_DIR = (Path(__file__) / ".." / "examples" / "invalid").resolve()
 
 
-if __name__ == "__main__":
-    test_examples()
+@pytest.mark.parametrize("example", 
+    map(str, VALID_DIR.iterdir())
+)
+def test_valid_examples(example):
+    validate_schema(load_yaml(example))
+
+
+@pytest.mark.parametrize("example", 
+    map(str, INVALID_DIR.iterdir())
+)
+def test_invalid_examples(example):
+    with pytest.raises(jsonschema.ValidationError):
+        validate_schema(load_yaml(example))
+

@@ -29,7 +29,8 @@ class OutFlags(BaseModel):
         description="User description for the output",
         title="Description",
     )
-
+    class Config:
+        extra = "forbid"
 
 class PlotFlags(OutFlags):
     x: str = Field(
@@ -91,8 +92,7 @@ class LiveFlags(PlotFlags):
         True, description="Signals dvclive to produce training report"
     )
     cache: Optional[bool] = Field(True, description="Cache output by DVC")
-    class Config:
-        extra = "forbid"
+
 
 class Live(BaseModel):
     __root__: Dict[FilePath, LiveFlags]
@@ -142,6 +142,7 @@ class Stage(BaseModel):
 
     class Config:
         allow_mutation = False
+        extra = "forbid"
 
 
 FOREACH_DESC = """\
@@ -164,7 +165,8 @@ class ForeachDo(BaseModel):
         ..., description=FOREACH_DESC
     )
     do: Stage = Field(..., description=DO_DESC)
-
+    class Config:
+        extra = "forbid"
 
 Definition = Union[ForeachDo, Stage]
 

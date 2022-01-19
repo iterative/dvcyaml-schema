@@ -13,6 +13,6 @@ stages:
           cache: false
           persist: true
   tests:
-    cmd: ./tests.py
+    cmd: pytest -vv tests.py
     deps:
       - schema.json

@@ -1,0 +1,10 @@
+stages:
+  stage_one:
+    cmd: python train.py input plots
+    deps:
+      - input
+    plots:
+      - plot1
+      - plot2:
+          cache: true
+          extra: false

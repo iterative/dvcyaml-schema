@@ -1,0 +1,11 @@
+stages:
+  copy_multiple:
+    cmd: cp foo bar && cp foo1 bar1
+    deps:
+      - foo
+      - foo1
+    outs:
+      - foo1
+      - bar1:
+          cache: false
+          extra: false
