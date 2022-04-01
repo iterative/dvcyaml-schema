@@ -14,3 +14,9 @@ stages:
           - loss
     outs:
       - params2.yaml
+  use-full-params_file:
+    cmd: cat full_file.yaml > params2.yaml
+    params:
+      - my_params.yaml:
+    outs:
+      - params2.yaml
