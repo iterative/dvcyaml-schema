@@ -61,7 +61,7 @@ class CustomParamFileKeys(BaseModel):
 
 
 class Param(BaseModel):
-    __root__: Union[ParamKey, CustomParamFileKeys]
+    __root__: Union[ParamKey, CustomParamFileKeys, Dict[FilePath, None]]
 
 
 class Params(BaseModel):

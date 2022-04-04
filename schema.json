@@ -78,6 +78,12 @@
         },
         {
           "$ref": "#/definitions/CustomParamFileKeys"
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "type": "null"
+          }
         }
       ]
     },
