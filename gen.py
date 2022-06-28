@@ -183,6 +183,7 @@ class DvcYamlModel(BaseModel):
 
     class Config:
         title = "dvc.yaml"
+        extra = "forbid"
 
         @staticmethod
         def schema_extra(schema: Dict[str, Any], _) -> None:

@@ -27,6 +27,7 @@
       }
     }
   },
+  "additionalProperties": false,
   "definitions": {
     "VarDecl": {
       "title": "VarDecl",

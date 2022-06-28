@@ -4,21 +4,21 @@ stages:
     cmd: ./gen.py > schema.json
     deps:
     - path: gen.py
-      md5: e49f62cdbd3ca8648a29c716ad19f14c
-      size: 5618
+      md5: f288541652b71695ac41ffb3010c04e0
+      size: 5621
     outs:
     - path: schema.json
-      md5: 6dc7651926e6c6a7c035b26e011d4e72
-      size: 11762
+      md5: 0e60e20d728b734a770fc62532271c4f
+      size: 11671
   check_updated:
     cmd: ./gen.py | diff schema.json -
     deps:
     - path: schema.json
-      md5: 6dc7651926e6c6a7c035b26e011d4e72
-      size: 11762
+      md5: 0e60e20d728b734a770fc62532271c4f
+      size: 11671
   tests:
     cmd: pytest -vv tests.py
     deps:
     - path: schema.json
-      md5: 6dc7651926e6c6a7c035b26e011d4e72
-      size: 11762
+      md5: 0e60e20d728b734a770fc62532271c4f
+      size: 11671
