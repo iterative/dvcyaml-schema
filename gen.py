@@ -9,7 +9,6 @@ from pydantic import BaseModel, Field, constr
 
 # aliases
 FilePath = NewType("FilePath", str)
-ParamKey = NewType("ParamKey", str)
 VarKey = NewType("VarKey", str)
 StageName = NewType("StageName", str)
 
@@ -48,20 +47,32 @@ class PlotFlags(OutFlags):
     template: FilePath = Field(None, description="Default plot template")
 
 
+DEP_DESC = "Path to a dependency (input) file or directory for the stage."
+
 class DepModel(BaseModel):
-    __root__: FilePath = Field(..., description="A dependency for the stage")
+    __root__: FilePath = Field(..., description=DEP_DESC)
 
 
 class Dependencies(BaseModel):
     __root__: Set[DepModel]
 
 
-class CustomParamFileKeys(BaseModel):
-    __root__: Dict[FilePath, Set[ParamKey]]
+class ParamKey(BaseModel):
+    __root__: str = Field(..., desc="Parameter name (dot-separated).")
 
+class CustomParamFileKeys(BaseModel):
+    __root__: Dict[FilePath, Set[ParamKey]] = Field(
+        ..., desc="Path to YAML/JSON/TOML/Python params file."
+    )
+
+
+class EmptyParamFileKeys(BaseModel):
+    __root__: Dict[FilePath, None] = Field(
+        ..., desc="Path to YAML/JSON/TOML/Python params file."
+    )
 
 class Param(BaseModel):
-    __root__: Union[ParamKey, CustomParamFileKeys, Dict[FilePath, None]]
+    __root__: Union[ParamKey, CustomParamFileKeys, EmptyParamFileKeys]
 
 
 class Params(BaseModel):
@@ -69,15 +80,33 @@ class Params(BaseModel):
 
 
 class Out(BaseModel):
-    __root__: Union[FilePath, Dict[FilePath, OutFlags]]
+    __root__: Union[FilePath, Dict[FilePath, OutFlags]] = Field(
+            ..., description="Path to an output file or dir of the stage."
+    )
 
 
 class Outs(BaseModel):
     __root__: Set[Out]
 
 
+class Metric(BaseModel):
+    __root__: Union[FilePath, Dict[FilePath, OutFlags]] = Field(
+            ...,
+            description="Path to a JSON/TOML/YAML metrics output of the stage."
+    )
+
+
+PLOT_DESC = """\
+Path to plots file or dir of the stage.
+
+Data files may be JSON/YAML/CSV/TSV.
+
+Image files may be JPEG/GIF/PNG."""
+
 class Plot(BaseModel):
-    __root__: Union[FilePath, Dict[FilePath, PlotFlags]]
+    __root__: Union[FilePath, Dict[FilePath, PlotFlags]] = Field(
+            ..., description=PLOT_DESC
+    )
 
 
 class Plots(BaseModel):
@@ -104,25 +133,67 @@ class Live(BaseModel):
             schema["maxProperties"] = 1
 
 
+class VarPath(BaseModel):
+    __root__: str = Field(
+            ..., description="Path to params file with values for substitution."
+    )
+
+
 class VarDecl(BaseModel):
     # {"foo" (str) : "foobar" (Any) }
-    __root__: Dict[VarKey, Any]
+    __root__: Dict[VarKey, Any] = Field(
+            ..., description="Dict of values for substitution."
+    )
 
 
 class Vars(BaseModel):
-    __root__: List[Union[FilePath, VarDecl]]
+    __root__: List[Union[VarPath, VarDecl]]
 
+
+STAGE_VARS_DESC = """\
+List of stage-specific values for substitution.
+
+May include any dict or a path to a params file.
+
+Use in the stage with the `${}` substitution expression."""
+
+CMD_DESC = """\
+(Required) Command to run (anything your system terminal can run).
+
+Can be a string or a list of commands."""
+
+PARAMS_DESC = """\
+List of dot-separated parameter dependency keys to track from `params.yaml`.
+
+May contain other YAML/JSON/TOML/Python parameter file names, with a \
+sub-list of the param names to track in them (leave empty to include all).\
+"""
+
+METRICS_DESC = "List of metrics of the stage written to JSON/TOML/YAML."
+
+PLOTS_DESC = """\
+List of plots of the stage for visualization.
+
+Plots may be written to JSON/YAML/CSV/TSV for data or JPEG/GIF/PNG for images.\
+"""
 
 class Stage(BaseModel):
-    cmd: Union[str, List[str]] = Field(..., description="Command to run")
-    wdir: Optional[str] = Field(None, description="Working directory")
+    """
+    A named stage of a pipeline.
+    """
+    cmd: Union[str, List[str]] = Field(..., description=CMD_DESC)
+    wdir: Optional[str] = Field(
+            None,
+            description="Working directory for the cmd, relative to `dvc.yaml`")
     deps: Optional[Dependencies] = Field(
-        None, description="Dependencies for the stage"
+        None, description="List of the dependencies for the stage."
     )
-    params: Optional[Params] = Field(None, description="Params for the stage")
-    outs: Optional[Outs] = Field(None, description="Outputs of the stage")
-    metrics: Optional[Outs] = Field(None, description="Metrics of the stage")
-    plots: Optional[Plots] = Field(None, description="Plots of the stage")
+    params: Optional[Params] = Field(None, description=PARAMS_DESC)
+    outs: Optional[Outs] = Field(
+            None, description="List of the outputs of the stage."
+    )
+    metrics: Optional[Outs] = Field(None, description=METRICS_DESC)
+    plots: Optional[Plots] = Field(None, description=PLOTS_DESC)
     live: Optional[Live] = Field(
         default_factory=list,
         description="Declare output as dvclive",
@@ -135,7 +206,7 @@ class Stage(BaseModel):
         False, description="Assume stage as always changed"
     )
     vars: Optional[Vars] = Field(
-        None, description="Variables for the parametrization"
+        None, description=STAGE_VARS_DESC
     )
     desc: Optional[str] = Field(None, description="Description of the stage")
     meta: Any = Field(None, description="Additional information/metadata")
@@ -146,14 +217,14 @@ class Stage(BaseModel):
 
 
 FOREACH_DESC = """\
-Iterable to loop through in foreach. Can be a parametrized string, list \
-or a dictionary.
+Iterable to loop through in foreach. Can be a parametrized string, list or \
+a dict.
 
-The stages will be generated by iterating through this data, by substituting
+The stages will be generated by iterating through this data, by substituting \
 data in the `do` block."""
 
 DO_DESC = """\
-Parametrized stage definition that'll be substituted over for each of the
+Parametrized stage definition that'll be substituted over for each of the \
 value from the foreach data."""
 
 
@@ -171,14 +242,23 @@ class ForeachDo(BaseModel):
 Definition = Union[ForeachDo, Stage]
 
 
+VARS_DESC = """\
+List of values for substitution.
+
+May include any dict or a path to a params file which may be a string or a \
+dict to params in the file).
+
+Use elsewhere in `dvc.yaml` with the `${}` substitution expression."""
+
 class DvcYamlModel(BaseModel):
     vars: Vars = Field(
         default_factory=list,
-        description="Variables for the parametrization",
+        description=VARS_DESC,
         title="Variables",
     )
     stages: Dict[StageName, Definition] = Field(
-        default_factory=dict, description="List of stages"
+        default_factory=dict,
+        description="List of stages that form a pipeline."
     )
 
     class Config:
