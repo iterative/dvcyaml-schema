@@ -4,7 +4,7 @@
   "properties": {
     "vars": {
       "title": "Variables",
-      "description": "Sequence of variables for parametrization.\n\nMay include any mapping or a path to a params file (which may be a string or a mapping to params in the file).\n\nUse elsewhere in `dvc.yaml` with the `${}` substitution expression.",
+      "description": "List of values for substitution.\n\nMay include any dict or a path to a params file which may be a string or a dict to params in the file).\n\nUse elsewhere in `dvc.yaml` with the `${}` substitution expression.",
       "allOf": [
         {
           "$ref": "#/definitions/Vars"
@@ -13,7 +13,7 @@
     },
     "stages": {
       "title": "Stages",
-      "description": "Sequence of stages that form a pipeline.",
+      "description": "List of stages that form a pipeline.",
       "type": "object",
       "additionalProperties": {
         "oneOf": [
@@ -31,12 +31,12 @@
   "definitions": {
     "VarPath": {
       "title": "VarPath",
-      "description": "Path to params file for parametrization.",
+      "description": "Path to params file with values for substitution.",
       "type": "string"
     },
     "VarDecl": {
       "title": "VarDecl",
-      "description": "Mapping for parametrization.",
+      "description": "Dict of values for substitution.",
       "type": "object"
     },
     "Vars": {
@@ -55,7 +55,7 @@
     },
     "DepModel": {
       "title": "DepModel",
-      "description": "Path to a dependency file or dir for the stage",
+      "description": "Path to a dependency (input) file or directory for the stage.",
       "type": "string"
     },
     "Dependencies": {
@@ -68,7 +68,7 @@
     },
     "ParamKey": {
       "title": "ParamKey",
-      "desc": "Parameter key (dot-separated).",
+      "desc": "Parameter name (dot-separated).",
       "type": "string"
     },
     "CustomParamFileKeys": {
@@ -348,7 +348,7 @@
       "properties": {
         "cmd": {
           "title": "Cmd",
-          "description": "(Required) Command to run (anything your system terminal can run).\n\nCan be a string or a sequence of commands.",
+          "description": "(Required) Command to run (anything your system terminal can run).\n\nCan be a string or a list of commands.",
           "anyOf": [
             {
               "type": "string"
@@ -368,7 +368,7 @@
         },
         "deps": {
           "title": "Deps",
-          "description": "Sequence of the dependencies for the stage.",
+          "description": "List of the dependencies for the stage.",
           "allOf": [
             {
               "$ref": "#/definitions/Dependencies"
@@ -377,7 +377,7 @@
         },
         "params": {
           "title": "Params",
-          "description": "Sequence of dot-separated parameter dependency keys to track from `params.yaml`.\n\nMay contain other YAML/JSON/TOML/Python parameter file names, with a sub-sequence of the param names to track in them (leave empty to include all).",
+          "description": "List of dot-separated parameter dependency keys to track from `params.yaml`.\n\nMay contain other YAML/JSON/TOML/Python parameter file names, with a sub-list of the param names to track in them (leave empty to include all).",
           "allOf": [
             {
               "$ref": "#/definitions/Params"
@@ -386,7 +386,7 @@
         },
         "outs": {
           "title": "Outs",
-          "description": "Sequence of the outputs of the stage.",
+          "description": "List of the outputs of the stage.",
           "allOf": [
             {
               "$ref": "#/definitions/Outs"
@@ -395,7 +395,7 @@
         },
         "metrics": {
           "title": "Metrics",
-          "description": "Sequence of metrics of the stage written to JSON/TOML/YAML for evaluation.",
+          "description": "List of metrics of the stage written to JSON/TOML/YAML.",
           "allOf": [
             {
               "$ref": "#/definitions/Outs"
@@ -404,7 +404,7 @@
         },
         "plots": {
           "title": "Plots",
-          "description": "Sequence of plots of the stage for visualization.\n\nPlots may be written to JSON/YAML/CSV/TSV for data or JPEG/GIF/PNG for images.",
+          "description": "List of plots of the stage for visualization.\n\nPlots may be written to JSON/YAML/CSV/TSV for data or JPEG/GIF/PNG for images.",
           "allOf": [
             {
               "$ref": "#/definitions/Plots"
@@ -434,7 +434,7 @@
         },
         "vars": {
           "title": "Vars",
-          "description": "Sequence of variables for parametrization.\n\nMay include any mapping or a path to a params file (which may be a string or a mapping to params in the file).\n\nUse in the stage with the `${}` substitution expression.",
+          "description": "List of stage-specific values for substitution.\n\nMay include any dict or a path to a params file.\n\nUse in the stage with the `${}` substitution expression.",
           "allOf": [
             {
               "$ref": "#/definitions/Vars"
@@ -462,7 +462,7 @@
       "properties": {
         "foreach": {
           "title": "Foreach",
-          "description": "Iterable to loop through in foreach. Can be a parametrized string, sequence or a mapping.\n\nThe stages will be generated by iterating through this data, by substituting data in the `do` block.",
+          "description": "Iterable to loop through in foreach. Can be a parametrized string, list or a dict.\n\nThe stages will be generated by iterating through this data, by substituting data in the `do` block.",
           "anyOf": [
             {
               "type": "string",
