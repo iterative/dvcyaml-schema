@@ -6,18 +6,18 @@ stages:
     - ./gen.py > schema.json
     deps:
     - path: gen.py
-      md5: 51343fbc02c5d3b8e06194153a4812e3
-      size: 8087
+      md5: fc3219b825566f393592f44bd1666d64
+      size: 9318
     outs:
     - path: schema.json
-      md5: d053ff3955261739561101afed69bc8c
-      size: 15102
+      md5: 56fe99c8294da8e75dfba024f7bcc56a
+      size: 17458
   tests:
     cmd: pytest
     deps:
     - path: schema.json
-      md5: d053ff3955261739561101afed69bc8c
-      size: 15102
+      md5: 56fe99c8294da8e75dfba024f7bcc56a
+      size: 17458
     - path: tests.py
       md5: ac4774d0d7fb55a7893fd70c0cbb0070
       size: 1104
@@ -27,8 +27,8 @@ stages:
     - pre-commit run --all
     deps:
     - path: gen.py
-      md5: 51343fbc02c5d3b8e06194153a4812e3
-      size: 8087
+      md5: fc3219b825566f393592f44bd1666d64
+      size: 9318
     - path: tests.py
       md5: ac4774d0d7fb55a7893fd70c0cbb0070
       size: 1104
