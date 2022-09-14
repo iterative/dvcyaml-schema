@@ -1,0 +1,20 @@
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+line_length = 79
+
+[tool.pytest.ini_options]
+addopts = "-ra -vv"
+testpaths = "tests.py"
+
+[tool.pylint.master]
+extension-pkg-whitelist = ["pydantic"]
+
+[tool.pylint.message_control]
+enable = ["c-extension-no-member", "no-else-return"]
+disable = [
+    "missing-function-docstring", "missing-class-docstring",
+    "too-few-public-methods",
+]

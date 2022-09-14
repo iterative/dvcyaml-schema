@@ -1,18 +1,29 @@
+vars:
+  - note: |
+      Please keep the commands in sync with .github/workflows/main.yml.
+      This file only exists to play with the schema in IDEs/TextEditors.
+  - seed: 20170428
 stages:
-  check_updated:
-    # check that generated file and the one in repo are same
-    cmd: ./gen.py | diff schema.json -
-    deps:
-      - schema.json
   generate:
-    cmd: ./gen.py > schema.json
+    cmd:
+    - ./gen.py | diff schema.json -
+    - ./gen.py > schema.json
     deps:
       - gen.py
+    always_changed: true
     outs:
       - schema.json:
           cache: false
           persist: true
   tests:
-    cmd: pytest -vv tests.py
+    cmd: pytest
+    always_changed: true
     deps:
       - schema.json
+      - tests.py
+  pylint:
+    cmd: pylint gen.py tests.py
+    always_changed: true
+    deps:
+    - gen.py
+    - tests.py
