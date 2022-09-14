@@ -21,8 +21,10 @@ stages:
     deps:
       - schema.json
       - tests.py
-  pylint:
-    cmd: pylint gen.py tests.py
+  lint:
+    cmd:
+    - pylint gen.py tests.py
+    - pre-commit run --all
     always_changed: true
     deps:
     - gen.py

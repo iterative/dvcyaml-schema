@@ -26,6 +26,19 @@ class OutFlags(BaseModel):
         description="User description for the output",
         title="Description",
     )
+    type: Optional[str] = Field(
+        None,
+        description="User assigned type of the output",
+        title="Type",
+    )
+    labels: Optional[Set[str]] = Field(
+        default_factory=set,
+        description="User assigned labels of the output",
+        title="Type",
+    )
+    meta: Optional[Dict[str, Any]] = Field(
+        None, description="Custom metadata of the output.", title="Meta"
+    )
 
     class Config:
         extra = "forbid"

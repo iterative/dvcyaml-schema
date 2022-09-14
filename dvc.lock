@@ -6,27 +6,29 @@ stages:
     - ./gen.py > schema.json
     deps:
     - path: gen.py
-      md5: e13feb792bc0090de39e13e399cf2fe6
-      size: 7676
+      md5: 17e76d0cf318098ddabcb5ca28616852
+      size: 8085
     outs:
     - path: schema.json
-      md5: 5b91fbeeac456ff9688edb402ad34996
-      size: 13515
+      md5: 95535416754f14a268ecc9bab8e928e2
+      size: 15096
   tests:
     cmd: pytest
     deps:
     - path: schema.json
-      md5: 5b91fbeeac456ff9688edb402ad34996
-      size: 13515
+      md5: 95535416754f14a268ecc9bab8e928e2
+      size: 15096
     - path: tests.py
       md5: 03e27b2e5a5d174e9d4998b2ca0c4e36
       size: 856
-  pylint:
-    cmd: pylint gen.py tests.py
+  lint:
+    cmd:
+    - pylint gen.py tests.py
+    - pre-commit run --all
     deps:
     - path: gen.py
-      md5: e13feb792bc0090de39e13e399cf2fe6
-      size: 7676
+      md5: 17e76d0cf318098ddabcb5ca28616852
+      size: 8085
     - path: tests.py
       md5: 03e27b2e5a5d174e9d4998b2ca0c4e36
       size: 856

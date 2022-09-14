@@ -57,7 +57,7 @@ Follow [this](https://www.jetbrains.com/help/ruby/yaml.html#remote_json) instruc
 2. Open [gen.py](gen.py) and make some adjustments, and generate schema using:
 
     ```console
-    $ python gen.py
+    $ python gen.py > schema.json
     ```
 3. (Optional) Add [valid](examples/valid) and [invalid](examples/invalid) yaml examples.
 
