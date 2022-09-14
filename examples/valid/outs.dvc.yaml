@@ -14,6 +14,13 @@ stages:
           checkpoint: true
       - bar4:
           desc: "bar4"
+          labels:
+          - label1
+          - label2
+          type: type1
+          meta:
+            key: value
+            key1: value1
     live:
       foo:
         summary: true
