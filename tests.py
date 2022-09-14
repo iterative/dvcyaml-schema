@@ -1,34 +1,31 @@
 #!/usr/bin/env python3
 """Tests for schema which runs validation using schema over examples folder."""
+# pylint: disable=redefined-outer-name
 
 import json
-from functools import partial
 from pathlib import Path
 
 import jsonschema
 import pytest
-from dvc.utils.serialize import load_yaml
+from ruamel.yaml import YAML
 
-schema = json.loads(
-    (Path(__file__) / ".." / "schema.json").resolve().read_text()
-)
-validate_schema = partial(jsonschema.validate, schema=schema)
+yaml = YAML(typ="safe")
 
-VALID_DIR = (Path(__file__) / ".." / "examples" / "valid").resolve()
-INVALID_DIR = (Path(__file__) / ".." / "examples" / "invalid").resolve()
+root = Path(__file__).resolve().parent
+examples_dir = root / "examples"
 
 
-@pytest.mark.parametrize("example", 
-    map(str, VALID_DIR.iterdir())
-)
-def test_valid_examples(example):
-    validate_schema(load_yaml(example))
+@pytest.fixture
+def schema():
+    return json.loads((root / "schema.json").read_text(encoding="utf-8"))
 
 
-@pytest.mark.parametrize("example", 
-    map(str, INVALID_DIR.iterdir())
-)
-def test_invalid_examples(example):
+@pytest.mark.parametrize("example", (examples_dir / "valid").iterdir())
+def test_valid_examples(schema, example):
+    jsonschema.validate(yaml.load(example), schema=schema)
+
+
+@pytest.mark.parametrize("example", (examples_dir / "invalid").iterdir())
+def test_invalid_examples(schema, example):
     with pytest.raises(jsonschema.ValidationError):
-        validate_schema(load_yaml(example))
-
+        jsonschema.validate(yaml.load(example), schema=schema)

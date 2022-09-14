@@ -45,11 +45,25 @@ Follow [this](https://www.jetbrains.com/help/ruby/yaml.html#remote_json) instruc
 
 ### Contributing
 
-1. Open [gen.py](gen.py) and make some adjustments.
-2. Generate schema and run tests:
-    ```console
-    $ dvc repro
-    ```
-3. Send us a pull request. 🤗
+1. Setup a virtual environment, and install required dependencies from [`requirements.txt`](requirements.txt).
 
-> Make sure to create a virtual environment before, and `dvc` is installed.
+    ```console
+    $ python -m venv venv
+    $ source venv/bin/activate
+    $ python -m pip install -U wheel pip
+    $ python -m pip install -r requirements.txt
+    ```
+    Also make sure that `dvc` is installed.
+2. Open [gen.py](gen.py) and make some adjustments, and generate schema using:
+
+    ```console
+    $ python gen.py
+    ```
+3. (Optional) Add [valid](examples/valid) and [invalid](examples/invalid) yaml examples.
+
+4. Run tests to validate compatibility.
+    ```console
+    $ python -m pytest
+    ```
+
+5. Send us a pull request. 🤗
