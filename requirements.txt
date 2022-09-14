@@ -1,4 +1,5 @@
 jsonschema
+pre-commit
 pydantic>1,<2
 pylint
 pytest

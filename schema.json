@@ -139,6 +139,25 @@
           "title": "Description",
           "description": "User description for the output",
           "type": "string"
+        },
+        "type": {
+          "title": "Type",
+          "description": "User assigned type of the output",
+          "type": "string"
+        },
+        "labels": {
+          "title": "Labels",
+          "description": "User assigned labels of the output",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "meta": {
+          "title": "Meta",
+          "description": "Custom metadata of the output.",
+          "type": "object"
         }
       },
       "additionalProperties": false
@@ -192,6 +211,25 @@
           "title": "Description",
           "description": "User description for the output",
           "type": "string"
+        },
+        "type": {
+          "title": "Type",
+          "description": "User assigned type of the output",
+          "type": "string"
+        },
+        "labels": {
+          "title": "Labels",
+          "description": "User assigned labels of the output",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "meta": {
+          "title": "Meta",
+          "description": "Custom metadata of the output.",
+          "type": "object"
         },
         "x": {
           "title": "X",
@@ -281,6 +319,25 @@
           "title": "Description",
           "description": "User description for the output",
           "type": "string"
+        },
+        "type": {
+          "title": "Type",
+          "description": "User assigned type of the output",
+          "type": "string"
+        },
+        "labels": {
+          "title": "Labels",
+          "description": "User assigned labels of the output",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "meta": {
+          "title": "Meta",
+          "description": "Custom metadata of the output.",
+          "type": "object"
         },
         "x": {
           "title": "X",
