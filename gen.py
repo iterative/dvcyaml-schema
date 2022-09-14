@@ -12,6 +12,9 @@ StageName = NewType("StageName", str)
 PlotIdOrFilePath = NewType("PlotIdOrFilePath", str)
 PlotColumn = NewType("PlotColumn", str)
 PlotColumns = Union[str, Set[PlotColumn]]
+PlotTemplateName = NewType("PlotTemplateName", str)
+
+Template = Union[PlotTemplateName, FilePath]
 
 
 class OutFlags(BaseModel):
@@ -77,7 +80,12 @@ class TopLevelPlotFlags(BaseModel):
     x_label: str = Field(None, description="Default label for the x-axis")
     y_label: str = Field(None, description="Default label for the y-axis")
     title: str = Field(None, description="Default plot title")
-    template: FilePath = Field(None, description="Default plot template")
+    template: Template = Field(
+        default="linear", description="Default plot template"
+    )
+
+    class Config:
+        extra = "forbid"
 
 
 class EmptyTopLevelPlotFlags(BaseModel):

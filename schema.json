@@ -625,9 +625,18 @@
         "template": {
           "title": "Template",
           "description": "Default plot template",
-          "type": "string"
+          "default": "linear",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            }
+          ]
         }
-      }
+      },
+      "additionalProperties": false
     },
     "EmptyTopLevelPlotFlags": {
       "title": "EmptyTopLevelPlotFlags",
