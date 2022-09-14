@@ -34,7 +34,7 @@ class OutFlags(BaseModel):
     labels: Optional[Set[str]] = Field(
         default_factory=set,
         description="User assigned labels of the output",
-        title="Type",
+        title="Labels",
     )
     meta: Optional[Dict[str, Any]] = Field(
         None, description="Custom metadata of the output.", title="Meta"

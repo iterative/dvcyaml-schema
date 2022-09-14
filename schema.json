@@ -146,7 +146,7 @@
           "type": "string"
         },
         "labels": {
-          "title": "Type",
+          "title": "Labels",
           "description": "User assigned labels of the output",
           "type": "array",
           "items": {
@@ -218,7 +218,7 @@
           "type": "string"
         },
         "labels": {
-          "title": "Type",
+          "title": "Labels",
           "description": "User assigned labels of the output",
           "type": "array",
           "items": {
@@ -326,7 +326,7 @@
           "type": "string"
         },
         "labels": {
-          "title": "Type",
+          "title": "Labels",
           "description": "User assigned labels of the output",
           "type": "array",
           "items": {
