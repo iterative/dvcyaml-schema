@@ -25,6 +25,21 @@
           }
         ]
       }
+    },
+    "plots": {
+      "title": "Plots",
+      "description": "Top level plots definition.",
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/TopLevelPlotFlags"
+          },
+          {
+            "$ref": "#/definitions/EmptyTopLevelPlotFlags"
+          }
+        ]
+      }
     }
   },
   "additionalProperties": false,
@@ -549,6 +564,74 @@
         "do"
       ],
       "additionalProperties": false
+    },
+    "TopLevelPlotFlags": {
+      "title": "TopLevelPlotFlags",
+      "type": "object",
+      "properties": {
+        "x": {
+          "title": "X",
+          "description": "Default field name to use as x-axis data",
+          "type": "string"
+        },
+        "y": {
+          "title": "Y",
+          "description": "A single column name, list of columns, or a dictionary of data-source and column pair",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "uniqueItems": true
+            },
+            {
+              "type": "object",
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "uniqueItems": true
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "x_label": {
+          "title": "X Label",
+          "description": "Default label for the x-axis",
+          "type": "string"
+        },
+        "y_label": {
+          "title": "Y Label",
+          "description": "Default label for the y-axis",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "description": "Default plot title",
+          "type": "string"
+        },
+        "template": {
+          "title": "Template",
+          "description": "Default plot template",
+          "type": "string"
+        }
+      }
+    },
+    "EmptyTopLevelPlotFlags": {
+      "title": "EmptyTopLevelPlotFlags",
+      "type": "null"
     }
   }
 }

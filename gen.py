@@ -9,6 +9,9 @@ from pydantic import BaseModel, Field, constr
 FilePath = NewType("FilePath", str)
 VarKey = NewType("VarKey", str)
 StageName = NewType("StageName", str)
+PlotIdOrFilePath = NewType("PlotIdOrFilePath", str)
+PlotColumn = NewType("PlotColumn", str)
+PlotColumns = Union[str, Set[PlotColumn]]
 
 
 class OutFlags(BaseModel):
@@ -45,10 +48,10 @@ class OutFlags(BaseModel):
 
 
 class PlotFlags(OutFlags):
-    x: str = Field(
+    x: PlotColumn = Field(
         None, description="Default field name to use as x-axis data"
     )
-    y: str = Field(
+    y: PlotColumn = Field(
         None, description="Default field name to use as y-axis data"
     )
     x_label: str = Field(None, description="Default label for the x-axis")
@@ -58,6 +61,27 @@ class PlotFlags(OutFlags):
         False, description="Whether the target CSV or TSV has a header or not"
     )
     template: FilePath = Field(None, description="Default plot template")
+
+
+class TopLevelPlotFlags(BaseModel):
+    x: PlotColumn = Field(
+        None, description="Default field name to use as x-axis data"
+    )
+    y: Union[PlotColumns, Dict[FilePath, PlotColumns]] = Field(
+        default_factory=dict,
+        description=(
+            "A single column name, list of columns,"
+            " or a dictionary of data-source and column pair"
+        ),
+    )
+    x_label: str = Field(None, description="Default label for the x-axis")
+    y_label: str = Field(None, description="Default label for the y-axis")
+    title: str = Field(None, description="Default plot title")
+    template: FilePath = Field(None, description="Default plot template")
+
+
+class EmptyTopLevelPlotFlags(BaseModel):
+    __root__: None = None
 
 
 DEP_DESC = "Path to a dependency (input) file or directory for the stage."
@@ -281,6 +305,9 @@ class DvcYamlModel(BaseModel):
         default_factory=dict,
         description="List of stages that form a pipeline.",
     )
+    plots: Dict[
+        PlotIdOrFilePath, Union[TopLevelPlotFlags, EmptyTopLevelPlotFlags]
+    ] = Field(default_factory=dict, description="Top level plots definition.")
 
     class Config:
         title = "dvc.yaml"
