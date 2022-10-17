@@ -1,0 +1,46 @@
+plots:
+  - test_vs_train_confusion:
+      x: actual_class
+      y:
+        train_classes.csv: predicted_class
+        test_classes.csv: [predicted_class, predicted_class2]
+      title: Compare test vs train confusion matrix
+      template: confusion
+      x_label: Actual class
+      y_label: Predicted class
+  - evaluation/test/plots/confusion_matrix.json: # Configure template and axes.
+      template: confusion
+      x: actual
+      y: predicted
+  - logs.csv:
+      x: actual
+      y: [predicted_class, predicted_class2]
+  - ROC: # Combine multiple data sources.
+      x: fpr
+      y:
+        evaluation/train/plots/roc.json: tpr
+        evaluation/test/plots/roc.json: tpr
+  - evaluation/importance.png: # Plot an image.
+
+stages:
+  stage_one:
+    cmd: python train.py input plots
+    deps:
+      - input
+    plots:
+      - plot1
+      - plot2:
+          cache: true
+      - plot3:
+          persist: true
+      - plot4:
+          persist: false
+          x: "2"
+      - plot5:
+          cache: false
+          y: epoch
+          y_label: Epochs
+          title: test run
+          template: confusion
+          x: auc
+          x_label: AUC

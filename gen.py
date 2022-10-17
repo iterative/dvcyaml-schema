@@ -313,8 +313,16 @@ class DvcYamlModel(BaseModel):
         default_factory=dict,
         description="List of stages that form a pipeline.",
     )
-    plots: Dict[
-        PlotIdOrFilePath, Union[TopLevelPlotFlags, EmptyTopLevelPlotFlags]
+    plots: Union[
+        Dict[
+            PlotIdOrFilePath, Union[TopLevelPlotFlags, EmptyTopLevelPlotFlags]
+        ],
+        List[
+            Dict[
+                PlotIdOrFilePath,
+                Union[TopLevelPlotFlags, EmptyTopLevelPlotFlags],
+            ]
+        ],
     ] = Field(default_factory=dict, description="Top level plots definition.")
 
     class Config:
