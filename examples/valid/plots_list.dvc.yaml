@@ -20,7 +20,7 @@ plots:
       y:
         evaluation/train/plots/roc.json: tpr
         evaluation/test/plots/roc.json: tpr
-  - evaluation/importance.png: # Plot an image.
+  - evaluation/importance.png # Plot an image.
 
 stages:
   stage_one:

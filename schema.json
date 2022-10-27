@@ -31,6 +31,29 @@
       "description": "Top level plots definition.",
       "anyOf": [
         {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/TopLevelPlotFlags"
+                    },
+                    {
+                      "$ref": "#/definitions/EmptyTopLevelPlotFlags"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "object",
           "additionalProperties": {
             "anyOf": [
@@ -41,22 +64,6 @@
                 "$ref": "#/definitions/EmptyTopLevelPlotFlags"
               }
             ]
-          }
-        },
-        {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "additionalProperties": {
-              "anyOf": [
-                {
-                  "$ref": "#/definitions/TopLevelPlotFlags"
-                },
-                {
-                  "$ref": "#/definitions/EmptyTopLevelPlotFlags"
-                }
-              ]
-            }
           }
         }
       ]
