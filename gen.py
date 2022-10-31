@@ -320,7 +320,7 @@ class DvcYamlModel(BaseModel):
                 Dict[
                     PlotIdOrFilePath,
                     Union[TopLevelPlotFlags, EmptyTopLevelPlotFlags],
-                ]
+                ],
             ]
         ],
         Dict[
