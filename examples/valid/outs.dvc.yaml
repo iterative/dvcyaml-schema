@@ -21,6 +21,10 @@ stages:
           meta:
             key: value
             key1: value1
+      - bar5:
+          remote: remote1
+      - bar6:
+          push: false
     live:
       foo:
         summary: true

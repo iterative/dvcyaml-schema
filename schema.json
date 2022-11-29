@@ -200,6 +200,17 @@
           "title": "Meta",
           "description": "Custom metadata of the output.",
           "type": "object"
+        },
+        "remote": {
+          "title": "Remote",
+          "description": "Name of the remote to use for pushing/fetching",
+          "type": "string"
+        },
+        "push": {
+          "title": "Push",
+          "description": "Whether the output should be pushed to remote during `dvc push`",
+          "default": true,
+          "type": "boolean"
         }
       },
       "additionalProperties": false
@@ -272,6 +283,17 @@
           "title": "Meta",
           "description": "Custom metadata of the output.",
           "type": "object"
+        },
+        "remote": {
+          "title": "Remote",
+          "description": "Name of the remote to use for pushing/fetching",
+          "type": "string"
+        },
+        "push": {
+          "title": "Push",
+          "description": "Whether the output should be pushed to remote during `dvc push`",
+          "default": true,
+          "type": "boolean"
         },
         "x": {
           "title": "X",
@@ -380,6 +402,17 @@
           "title": "Meta",
           "description": "Custom metadata of the output.",
           "type": "object"
+        },
+        "remote": {
+          "title": "Remote",
+          "description": "Name of the remote to use for pushing/fetching",
+          "type": "string"
+        },
+        "push": {
+          "title": "Push",
+          "description": "Whether the output should be pushed to remote during `dvc push`",
+          "default": true,
+          "type": "boolean"
         },
         "x": {
           "title": "X",

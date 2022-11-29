@@ -45,6 +45,15 @@ class OutFlags(BaseModel):
     meta: Optional[Dict[str, Any]] = Field(
         None, description="Custom metadata of the output.", title="Meta"
     )
+    remote: Optional[str] = Field(
+        None,
+        description="Name of the remote to use for pushing/fetching",
+    )
+    push: Optional[bool] = Field(
+        True,
+        description="Whether the output should be pushed to remote "
+        "during `dvc push`",
+    )
 
     class Config:
         extra = "forbid"
