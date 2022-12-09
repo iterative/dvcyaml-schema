@@ -336,6 +336,12 @@ class DvcYamlModel(BaseModel):
             PlotIdOrFilePath, Union[TopLevelPlotFlags, EmptyTopLevelPlotFlags]
         ],
     ] = Field(default_factory=dict, description="Top level plots definition.")
+    params: Set[FilePath] = Field(
+        default_factory=set, description="List of parameter files"
+    )
+    metrics: Set[FilePath] = Field(
+        default_factory=set, description="List of metric files"
+    )
 
     class Config:
         title = "dvc.yaml"

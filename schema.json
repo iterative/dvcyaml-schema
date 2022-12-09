@@ -67,6 +67,24 @@
           }
         }
       ]
+    },
+    "params": {
+      "title": "Params",
+      "description": "List of parameter files",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "metrics": {
+      "title": "Metrics",
+      "description": "List of metric files",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
     }
   },
   "additionalProperties": false,
