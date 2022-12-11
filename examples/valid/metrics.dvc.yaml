@@ -1,3 +1,6 @@
+metrics:
+- top-metrics1.yaml
+- top-metrics2.yaml
 stages:
   generate-metrics:
     cmd: echo "metric" > scores.json
