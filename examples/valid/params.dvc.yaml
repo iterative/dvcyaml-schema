@@ -1,3 +1,6 @@
+params:
+- top-params1.yaml
+- top-params2.yaml
 stages:
   use-params_stage:
     cmd: cat params.yaml > params2.yaml
