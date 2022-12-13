@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """schema.json generator."""
+import re
+from typing import Any, NewType
 
-from typing import Any, Dict, List, NewType, Optional, Set, Union
-
-from pydantic import BaseModel, Field, constr
+from pydantic import BaseModel, ConstrainedStr, Field
 
 # aliases
 FilePath = NewType("FilePath", str)
@@ -11,45 +11,42 @@ VarKey = NewType("VarKey", str)
 StageName = NewType("StageName", str)
 PlotIdOrFilePath = NewType("PlotIdOrFilePath", str)
 PlotColumn = NewType("PlotColumn", str)
-PlotColumns = Union[str, Set[PlotColumn]]
+PlotColumns = str | set[PlotColumn]
 PlotTemplateName = NewType("PlotTemplateName", str)
 
-Template = Union[PlotTemplateName, FilePath]
+Template = PlotTemplateName | FilePath
 
 
 class OutFlags(BaseModel):
-    cache: Optional[bool] = Field(True, description="Cache output by DVC")
-    persist: Optional[bool] = Field(
+    cache: bool | None = Field(True, description="Cache output by DVC")
+    persist: bool | None = Field(
         False, description="Persist output between runs"
     )
-    checkpoint: Optional[bool] = Field(
+    checkpoint: bool | None = Field(
         False,
         description="Indicate that the output is associated with "
         "in-code checkpoints",
     )
-    desc: Optional[str] = Field(
+    desc: str | None = Field(
         None,
         description="User description for the output",
         title="Description",
     )
-    type: Optional[str] = Field(
-        None,
-        description="User assigned type of the output",
-        title="Type",
+    type: str | None = Field(
+        None, description="User assigned type of the output", title="Type"
     )
-    labels: Optional[Set[str]] = Field(
+    labels: set[str] | None = Field(
         default_factory=set,
         description="User assigned labels of the output",
         title="Labels",
     )
-    meta: Optional[Dict[str, Any]] = Field(
+    meta: dict[str, Any] | None = Field(
         None, description="Custom metadata of the output.", title="Meta"
     )
-    remote: Optional[str] = Field(
-        None,
-        description="Name of the remote to use for pushing/fetching",
+    remote: str | None = Field(
+        None, description="Name of the remote to use for pushing/fetching"
     )
-    push: Optional[bool] = Field(
+    push: bool | None = Field(
         True,
         description="Whether the output should be pushed to remote "
         "during `dvc push`",
@@ -79,7 +76,7 @@ class TopLevelPlotFlags(BaseModel):
     x: PlotColumn = Field(
         None, description="Default field name to use as x-axis data"
     )
-    y: Union[PlotColumns, Dict[FilePath, PlotColumns]] = Field(
+    y: PlotColumns | dict[FilePath, PlotColumns] = Field(
         default_factory=dict,
         description=(
             "A single column name, list of columns,"
@@ -109,7 +106,7 @@ class DepModel(BaseModel):
 
 
 class Dependencies(BaseModel):
-    __root__: Set[DepModel]
+    __root__: set[DepModel]
 
 
 class ParamKey(BaseModel):
@@ -117,37 +114,37 @@ class ParamKey(BaseModel):
 
 
 class CustomParamFileKeys(BaseModel):
-    __root__: Dict[FilePath, Set[ParamKey]] = Field(
+    __root__: dict[FilePath, set[ParamKey]] = Field(
         ..., desc="Path to YAML/JSON/TOML/Python params file."
     )
 
 
 class EmptyParamFileKeys(BaseModel):
-    __root__: Dict[FilePath, None] = Field(
+    __root__: dict[FilePath, None] = Field(
         ..., desc="Path to YAML/JSON/TOML/Python params file."
     )
 
 
 class Param(BaseModel):
-    __root__: Union[ParamKey, CustomParamFileKeys, EmptyParamFileKeys]
+    __root__: ParamKey | CustomParamFileKeys | EmptyParamFileKeys
 
 
 class Params(BaseModel):
-    __root__: Set[Param]
+    __root__: set[Param]
 
 
 class Out(BaseModel):
-    __root__: Union[FilePath, Dict[FilePath, OutFlags]] = Field(
+    __root__: FilePath | dict[FilePath, OutFlags] = Field(
         ..., description="Path to an output file or dir of the stage."
     )
 
 
 class Outs(BaseModel):
-    __root__: Set[Out]
+    __root__: set[Out]
 
 
 class Metric(BaseModel):
-    __root__: Union[FilePath, Dict[FilePath, OutFlags]] = Field(
+    __root__: FilePath | dict[FilePath, OutFlags] = Field(
         ...,
         description="Path to a JSON/TOML/YAML metrics output of the stage.",
     )
@@ -162,13 +159,13 @@ Image files may be JPEG/GIF/PNG."""
 
 
 class Plot(BaseModel):
-    __root__: Union[FilePath, Dict[FilePath, PlotFlags]] = Field(
+    __root__: FilePath | dict[FilePath, PlotFlags] = Field(
         ..., description=PLOT_DESC
     )
 
 
 class Plots(BaseModel):
-    __root__: Set[Plot]
+    __root__: set[Plot]
 
 
 class LiveFlags(PlotFlags):
@@ -178,15 +175,15 @@ class LiveFlags(PlotFlags):
     html: bool = Field(
         True, description="Signals dvclive to produce training report"
     )
-    cache: Optional[bool] = Field(True, description="Cache output by DVC")
+    cache: bool | None = Field(True, description="Cache output by DVC")
 
 
 class Live(BaseModel):
-    __root__: Dict[FilePath, LiveFlags]
+    __root__: dict[FilePath, LiveFlags]
 
     class Config:
         @staticmethod
-        def schema_extra(schema: Dict[str, Any], _) -> None:
+        def schema_extra(schema: dict[str, Any], _) -> None:
             """Limit no. of keys to just 1 for the Live."""
             schema["maxProperties"] = 1
 
@@ -199,13 +196,13 @@ class VarPath(BaseModel):
 
 class VarDecl(BaseModel):
     # {"foo" (str) : "foobar" (Any) }
-    __root__: Dict[VarKey, Any] = Field(
+    __root__: dict[VarKey, Any] = Field(
         ..., description="Dict of values for substitution."
     )
 
 
 class Vars(BaseModel):
-    __root__: List[Union[VarPath, VarDecl]]
+    __root__: list[VarPath | VarDecl]
 
 
 STAGE_VARS_DESC = """\
@@ -241,33 +238,31 @@ class Stage(BaseModel):
     A named stage of a pipeline.
     """
 
-    cmd: Union[str, List[str]] = Field(..., description=CMD_DESC)
-    wdir: Optional[str] = Field(
+    cmd: str | list[str] = Field(..., description=CMD_DESC)
+    wdir: str | None = Field(
         None,
         description="Working directory for the cmd, relative to `dvc.yaml`",
     )
-    deps: Optional[Dependencies] = Field(
+    deps: Dependencies | None = Field(
         None, description="List of the dependencies for the stage."
     )
-    params: Optional[Params] = Field(None, description=PARAMS_DESC)
-    outs: Optional[Outs] = Field(
+    params: Params | None = Field(None, description=PARAMS_DESC)
+    outs: Outs | None = Field(
         None, description="List of the outputs of the stage."
     )
-    metrics: Optional[Outs] = Field(None, description=METRICS_DESC)
-    plots: Optional[Plots] = Field(None, description=PLOTS_DESC)
-    live: Optional[Live] = Field(
+    metrics: Outs | None = Field(None, description=METRICS_DESC)
+    plots: Plots | None = Field(None, description=PLOTS_DESC)
+    live: Live | None = Field(
         default_factory=list,
         description="Declare output as dvclive",
         title="Dvclive",
     )
-    frozen: Optional[bool] = Field(
-        False, description="Assume stage as unchanged"
-    )
-    always_changed: Optional[bool] = Field(
+    frozen: bool | None = Field(False, description="Assume stage as unchanged")
+    always_changed: bool | None = Field(
         False, description="Assume stage as always changed"
     )
-    vars: Optional[Vars] = Field(None, description=STAGE_VARS_DESC)
-    desc: Optional[str] = Field(None, description="Description of the stage")
+    vars: Vars | None = Field(None, description=STAGE_VARS_DESC)
+    desc: str | None = Field(None, description="Description of the stage")
     meta: Any = Field(None, description="Additional information/metadata")
 
     class Config:
@@ -287,11 +282,12 @@ Parametrized stage definition that'll be substituted over for each of the \
 value from the foreach data."""
 
 
-ParametrizedString = constr(regex=r"^\${.*?}$")
+class ParametrizedString(ConstrainedStr):
+    regex = re.compile(r"^\${.*?}$")
 
 
 class ForeachDo(BaseModel):
-    foreach: Union[ParametrizedString, List[Any], Dict[str, Any]] = Field(
+    foreach: ParametrizedString | list[Any] | dict[str, Any] = Field(
         ..., description=FOREACH_DESC
     )
     do: Stage = Field(..., description=DO_DESC)
@@ -300,7 +296,7 @@ class ForeachDo(BaseModel):
         extra = "forbid"
 
 
-Definition = Union[ForeachDo, Stage]
+Definition = ForeachDo | Stage
 
 
 VARS_DESC = """\
@@ -312,34 +308,27 @@ dict to params in the file).
 Use elsewhere in `dvc.yaml` with the `${}` substitution expression."""
 
 
+PlotsDict = dict[PlotIdOrFilePath, TopLevelPlotFlags | EmptyTopLevelPlotFlags]
+PlotsList = list[PlotIdOrFilePath | PlotsDict]
+
+
 class DvcYamlModel(BaseModel):
     vars: Vars = Field(
         default_factory=list,
         description=VARS_DESC,
         title="Variables",
     )
-    stages: Dict[StageName, Definition] = Field(
+    stages: dict[StageName, Definition] = Field(
         default_factory=dict,
         description="List of stages that form a pipeline.",
     )
-    plots: Union[
-        List[
-            Union[
-                PlotIdOrFilePath,
-                Dict[
-                    PlotIdOrFilePath,
-                    Union[TopLevelPlotFlags, EmptyTopLevelPlotFlags],
-                ],
-            ]
-        ],
-        Dict[
-            PlotIdOrFilePath, Union[TopLevelPlotFlags, EmptyTopLevelPlotFlags]
-        ],
-    ] = Field(default_factory=dict, description="Top level plots definition.")
-    params: Set[FilePath] = Field(
+    plots: PlotsList | PlotsDict = Field(
+        default_factory=dict, description="Top level plots definition."
+    )
+    params: set[FilePath] = Field(
         default_factory=set, description="List of parameter files"
     )
-    metrics: Set[FilePath] = Field(
+    metrics: set[FilePath] = Field(
         default_factory=set, description="List of metric files"
     )
 
@@ -348,7 +337,7 @@ class DvcYamlModel(BaseModel):
         extra = "forbid"
 
         @staticmethod
-        def schema_extra(schema: Dict[str, Any], _) -> None:
+        def schema_extra(schema: dict[str, Any], _) -> None:
             """Make foreach-do/stage either-or."""
             for item in ["properties", "stages", "additionalProperties"]:
                 schema = schema.get(item, {})
@@ -356,4 +345,16 @@ class DvcYamlModel(BaseModel):
 
 
 if __name__ == "__main__":
-    print(DvcYamlModel.schema_json(indent=2))
+    import sys
+    from argparse import ArgumentParser, FileType
+
+    parser = ArgumentParser()
+    parser.add_argument(
+        "outfile", nargs="?", type=FileType("w"), default=sys.stdout
+    )
+
+    args = parser.parse_args()
+    json = DvcYamlModel.schema_json(indent=2)
+    args.outfile.write(json)
+    args.outfile.write("\n")
+    args.outfile.close()
