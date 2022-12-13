@@ -1,5 +1,6 @@
 default_language_version:
   python: python3
+
 repos:
   - repo: https://github.com/psf/black
     rev: 22.8.0
@@ -47,3 +48,35 @@ repos:
           - flake8-comprehensions==3.10.0
           - flake8-debugger==4.1.2
           - flake8-string-format==0.3.0
+  - repo: https://github.com/PyCQA/pylint
+    rev: v2.15.8
+    hooks:
+     - id: pylint
+       additional_dependencies: &test_deps
+        - jsonschema
+        - pydantic>1,<2
+        - pytest
+        - ruamel.yaml
+        - types-jsonschema
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.991
+    hooks:
+    - id: mypy
+    additional_dependencies: *test_deps
+  - repo: local
+    hooks:
+    - id: gen
+      name: generate-schema
+      entry: python gen.py
+      files: schema.json
+      language: python
+      verbose: true
+      additional_dependencies:
+        - pydantic>1,<2"
+    - id: test
+      name: test-schema
+      entry: pytest
+      pass_filenames: false
+      language: python
+      verbose: true
+      additional_dependencies: *test_deps

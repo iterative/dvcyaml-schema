@@ -45,25 +45,13 @@ Follow [this](https://www.jetbrains.com/help/ruby/yaml.html#remote_json) instruc
 
 ### Contributing
 
-1. Setup a virtual environment, and install required dependencies from [`requirements.txt`](requirements.txt).
-
+1. Install `pre-commit` hook.
     ```console
-    $ python -m venv venv
-    $ source venv/bin/activate
-    $ python -m pip install -U wheel pip
-    $ python -m pip install -r requirements.txt
+    $ pip install pre-commit
+    $ pre-commit install
     ```
-    Also make sure that `dvc` is installed.
-2. Open [gen.py](gen.py) and make some adjustments, and generate schema using:
-
-    ```console
-    $ python gen.py > schema.json
-    ```
+2. Open [gen.py](gen.py), make some adjustments.
 3. (Optional) Add [valid](examples/valid) and [invalid](examples/invalid) yaml examples.
-
-4. Run tests to validate compatibility.
-    ```console
-    $ python -m pytest
-    ```
-
+4. Commit. `pre-commit` hook should run automatically and format/lint code, generate new schema and run tests.
+If there are any new changes, add and try to commit it again.
 5. Send us a pull request. 🤗
