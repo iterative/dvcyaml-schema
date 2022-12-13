@@ -322,7 +322,7 @@ class DvcYamlModel(BaseModel):
         default_factory=dict,
         description="List of stages that form a pipeline.",
     )
-    plots: PlotsList | PlotsDict = Field(
+    plots: PlotsList = Field(
         default_factory=dict, description="Top level plots definition."
     )
     params: set[FilePath] = Field(
