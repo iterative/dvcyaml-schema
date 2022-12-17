@@ -68,8 +68,9 @@ repos:
     hooks:
     - id: gen
       name: generate-schema
-      entry: python gen.py
-      files: schema.json
+      entry: python gen.py schema.json
+      files: ^gen.py|schema.json$
+      pass_filenames: false
       language: python
       verbose: true
       additional_dependencies:
