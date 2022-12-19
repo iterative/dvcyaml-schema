@@ -73,8 +73,12 @@ class PlotFlags(OutFlags):
 
 
 class TopLevelPlotFlags(BaseModel):
-    x: PlotColumn = Field(
-        None, description="Default field name to use as x-axis data"
+    x: PlotColumn | dict[FilePath, PlotColumn] = Field(
+        None,
+        description=(
+            "A single column name, "
+            "or a dictionary of data-source and column pair"
+        ),
     )
     y: PlotColumns | dict[FilePath, PlotColumns] = Field(
         default_factory=dict,

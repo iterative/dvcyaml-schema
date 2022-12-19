@@ -649,8 +649,18 @@
       "properties": {
         "x": {
           "title": "X",
-          "description": "Default field name to use as x-axis data",
-          "type": "string"
+          "description": "A single column name, or a dictionary of data-source and column pair",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          ]
         },
         "y": {
           "title": "Y",

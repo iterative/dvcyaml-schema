@@ -20,8 +20,21 @@ plots:
       y:
         evaluation/train/plots/roc.json: tpr
         evaluation/test/plots/roc.json: tpr
+  - confusion: # x dict
+      x:
+        dir/actual.csv: actual
+      y:
+        dir/preds.csv: predicted
+      template: confusion
+  - roc_vs_prc: # multiple x values
+      x:
+        precision_recall.json: recall
+        roc.json: fpr
+      y:
+        precision_recall.json: precision
+        roc.json: tpr
   - evaluation/importance.png: # Plot an image as dict.
-  - evaluation/importance.png # Plot an image as str.
+  - evaluation/shap.png # Plot an image as str.
 
 stages:
   stage_one:
