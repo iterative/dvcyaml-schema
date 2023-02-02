@@ -31,40 +31,10 @@
       "description": "Top level plots definition.",
       "anyOf": [
         {
-          "type": "array",
-          "items": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "object",
-                "additionalProperties": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/TopLevelPlotFlags"
-                    },
-                    {
-                      "$ref": "#/definitions/EmptyTopLevelPlotFlags"
-                    }
-                  ]
-                }
-              }
-            ]
-          }
+          "$ref": "#/definitions/TopLevelPlots"
         },
         {
-          "type": "object",
-          "additionalProperties": {
-            "anyOf": [
-              {
-                "$ref": "#/definitions/TopLevelPlotFlags"
-              },
-              {
-                "$ref": "#/definitions/EmptyTopLevelPlotFlags"
-              }
-            ]
-          }
+          "$ref": "#/definitions/TopLevelPlotsList"
         }
       ]
     },
@@ -643,6 +613,31 @@
       ],
       "additionalProperties": false
     },
+    "X": {
+      "title": "X",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "Y": {
+      "title": "Y",
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          }
+        ]
+      }
+    },
     "TopLevelPlotFlags": {
       "title": "TopLevelPlotFlags",
       "type": "object",
@@ -655,10 +650,7 @@
               "type": "string"
             },
             {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
+              "$ref": "#/definitions/X"
             }
           ]
         },
@@ -677,21 +669,7 @@
               "uniqueItems": true
             },
             {
-              "type": "object",
-              "additionalProperties": {
-                "anyOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "uniqueItems": true
-                  }
-                ]
-              }
+              "$ref": "#/definitions/Y"
             }
           ]
         },
@@ -729,6 +707,34 @@
     "EmptyTopLevelPlotFlags": {
       "title": "EmptyTopLevelPlotFlags",
       "type": "null"
+    },
+    "TopLevelPlots": {
+      "title": "TopLevelPlots",
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/TopLevelPlotFlags"
+          },
+          {
+            "$ref": "#/definitions/EmptyTopLevelPlotFlags"
+          }
+        ]
+      }
+    },
+    "TopLevelPlotsList": {
+      "title": "TopLevelPlotsList",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "$ref": "#/definitions/TopLevelPlots"
+          }
+        ]
+      }
     }
   }
 }
