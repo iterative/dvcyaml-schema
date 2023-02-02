@@ -72,15 +72,25 @@ class PlotFlags(OutFlags):
     template: FilePath = Field(None, description="Default plot template")
 
 
+# pylint: disable=invalid-name
+class X(BaseModel):
+    __root__: dict[FilePath, PlotColumn] = Field(default_factory=dict)
+
+
+# pylint: disable=invalid-name
+class Y(BaseModel):
+    __root__: dict[FilePath, PlotColumns] = Field(default_factory=dict)
+
+
 class TopLevelPlotFlags(BaseModel):
-    x: PlotColumn | dict[FilePath, PlotColumn] = Field(
+    x: PlotColumn | X = Field(
         None,
         description=(
             "A single column name, "
             "or a dictionary of data-source and column pair"
         ),
     )
-    y: PlotColumns | dict[FilePath, PlotColumns] = Field(
+    y: PlotColumns | Y = Field(
         default_factory=dict,
         description=(
             "A single column name, list of columns,"
@@ -312,8 +322,16 @@ dict to params in the file).
 Use elsewhere in `dvc.yaml` with the `${}` substitution expression."""
 
 
-PlotsDict = dict[PlotIdOrFilePath, TopLevelPlotFlags | EmptyTopLevelPlotFlags]
-PlotsList = list[PlotIdOrFilePath | PlotsDict]
+class TopLevelPlots(BaseModel):
+    __root__: dict[
+        PlotIdOrFilePath, TopLevelPlotFlags | EmptyTopLevelPlotFlags
+    ] = Field(default_factory=dict)
+
+
+class TopLevelPlotsList(BaseModel):
+    __root__: list[PlotIdOrFilePath | TopLevelPlots] = Field(
+        default_factory=list
+    )
 
 
 class DvcYamlModel(BaseModel):
@@ -326,7 +344,7 @@ class DvcYamlModel(BaseModel):
         default_factory=dict,
         description="List of stages that form a pipeline.",
     )
-    plots: PlotsList | PlotsDict = Field(
+    plots: TopLevelPlots | TopLevelPlotsList = Field(
         default_factory=dict, description="Top level plots definition."
     )
     params: set[FilePath] = Field(
