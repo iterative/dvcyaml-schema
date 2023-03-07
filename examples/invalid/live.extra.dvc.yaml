@@ -6,4 +6,3 @@ stages:
         summary: true
         html: true
         cache: false
-        extra: false

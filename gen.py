@@ -182,26 +182,6 @@ class Plots(BaseModel):
     __root__: set[Plot]
 
 
-class LiveFlags(PlotFlags):
-    summary: bool = Field(
-        True, description="Signals dvclive to dump latest metrics file"
-    )
-    html: bool = Field(
-        True, description="Signals dvclive to produce training report"
-    )
-    cache: bool | None = Field(True, description="Cache output by DVC")
-
-
-class Live(BaseModel):
-    __root__: dict[FilePath, LiveFlags]
-
-    class Config:
-        @staticmethod
-        def schema_extra(schema: dict[str, Any], _) -> None:
-            """Limit no. of keys to just 1 for the Live."""
-            schema["maxProperties"] = 1
-
-
 class VarPath(BaseModel):
     __root__: str = Field(
         ..., description="Path to params file with values for substitution."
@@ -266,11 +246,6 @@ class Stage(BaseModel):
     )
     metrics: Outs | None = Field(None, description=METRICS_DESC)
     plots: Plots | None = Field(None, description=PLOTS_DESC)
-    live: Live | None = Field(
-        default_factory=list,
-        description="Declare output as dvclive",
-        title="Dvclive",
-    )
     frozen: bool | None = Field(False, description="Assume stage as unchanged")
     always_changed: bool | None = Field(
         False, description="Assume stage as always changed"
