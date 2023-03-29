@@ -1,0 +1,15 @@
+artifacts:
+  empty:
+  empty_dict: {}
+  myart:
+    type: model
+  hello:
+    type: file
+    path: hello.txt
+    desc: "some description"
+    meta:
+      key: value
+      key2: value2
+    labels:
+    - label1
+    - label2

@@ -1,0 +1,4 @@
+artifacts:
+  with-extra-field:
+    type: model
+    extra: 3

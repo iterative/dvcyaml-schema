@@ -45,13 +45,19 @@ Follow [this](https://www.jetbrains.com/help/ruby/yaml.html#remote_json) instruc
 
 ### Contributing
 
-1. Install `pre-commit` hook.
+1. Prepare your environment (you'll need `python3.10+` and `pip`).
+    ```console
+    $ python3 -m venv .venv
+    $ source .venv/bin/activate
+    $ pip install -r requirements.txt
+    ```
+2. Install `pre-commit` hook.
     ```console
     $ pip install pre-commit
     $ pre-commit install
     ```
-2. Open [gen.py](gen.py), make some adjustments.
-3. (Optional) Add [valid](examples/valid) and [invalid](examples/invalid) yaml examples.
-4. Commit. `pre-commit` hook should run automatically and format/lint code, generate new schema and run tests.
+3. Open [gen.py](gen.py), make some adjustments.
+4. (Optional) Add [valid](examples/valid) and [invalid](examples/invalid) yaml examples.
+5. Commit. `pre-commit` hook should run automatically and format/lint code, generate new schema and run tests.
 If there are any new changes, add and try to commit it again.
-5. Send us a pull request. 🤗
+6. Send us a pull request. 🤗

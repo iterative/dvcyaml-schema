@@ -55,6 +55,18 @@
         "type": "string"
       },
       "uniqueItems": true
+    },
+    "artifacts": {
+      "title": "Artifacts",
+      "description": "Top level artifacts definition.",
+      "anyOf": [
+        {
+          "$ref": "#/definitions/TopLevelArtifacts"
+        },
+        {
+          "type": "string"
+        }
+      ]
     }
   },
   "additionalProperties": false,
@@ -607,6 +619,60 @@
           },
           {
             "$ref": "#/definitions/TopLevelPlots"
+          }
+        ]
+      }
+    },
+    "TopLevelArtifactFlags": {
+      "title": "TopLevelArtifactFlags",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "description": "Type of the artifact",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "description": "Path to the artifact",
+          "type": "string"
+        },
+        "desc": {
+          "title": "Desc",
+          "description": "Description for the artifact",
+          "type": "string"
+        },
+        "meta": {
+          "title": "Meta",
+          "description": "Custom metadata for the artifact",
+          "type": "object"
+        },
+        "labels": {
+          "title": "Labels",
+          "description": "Labels for the artifact",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "EmptyTopLevelArtifactFlags": {
+      "title": "EmptyTopLevelArtifactFlags",
+      "type": "null"
+    },
+    "TopLevelArtifacts": {
+      "title": "TopLevelArtifacts",
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/TopLevelArtifactFlags"
+          },
+          {
+            "$ref": "#/definitions/EmptyTopLevelArtifactFlags"
           }
         ]
       }

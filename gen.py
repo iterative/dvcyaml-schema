@@ -13,6 +13,7 @@ PlotIdOrFilePath = NewType("PlotIdOrFilePath", str)
 PlotColumn = NewType("PlotColumn", str)
 PlotColumns = str | set[PlotColumn]
 PlotTemplateName = NewType("PlotTemplateName", str)
+ArtifactIdOrFilePath = NewType("ArtifactIdOrFilePath", str)
 
 Template = PlotTemplateName | FilePath
 
@@ -109,6 +110,25 @@ class TopLevelPlotFlags(BaseModel):
 
 
 class EmptyTopLevelPlotFlags(BaseModel):
+    __root__: None = None
+
+
+class TopLevelArtifactFlags(BaseModel):
+    type: str = Field(None, description="Type of the artifact")
+    path: str = Field(None, description="Path to the artifact")
+    desc: str = Field(None, description="Description for the artifact")
+    meta: dict[str, Any] = Field(
+        None, description="Custom metadata for the artifact"
+    )
+    labels: set[str] = Field(
+        default_factory=set, description="Labels for the artifact"
+    )
+
+    class Config:
+        extra = "forbid"
+
+
+class EmptyTopLevelArtifactFlags(BaseModel):
     __root__: None = None
 
 
@@ -309,6 +329,13 @@ class TopLevelPlotsList(BaseModel):
     )
 
 
+class TopLevelArtifacts(BaseModel):
+    __root__: dict[
+        ArtifactIdOrFilePath,
+        TopLevelArtifactFlags | EmptyTopLevelArtifactFlags,
+    ] = Field(default_factory=dict)
+
+
 class DvcYamlModel(BaseModel):
     vars: Vars = Field(
         default_factory=list,
@@ -327,6 +354,9 @@ class DvcYamlModel(BaseModel):
     )
     metrics: set[FilePath] = Field(
         default_factory=set, description="List of metric files"
+    )
+    artifacts: TopLevelArtifacts | str = Field(
+        default_factory=dict, description="Top level artifacts definition."
     )
 
     class Config:
