@@ -13,7 +13,6 @@ PlotIdOrFilePath = NewType("PlotIdOrFilePath", str)
 PlotColumn = NewType("PlotColumn", str)
 PlotColumns = str | set[PlotColumn]
 PlotTemplateName = NewType("PlotTemplateName", str)
-ArtifactIdOrFilePath = NewType("ArtifactIdOrFilePath", str)
 
 Template = PlotTemplateName | FilePath
 
@@ -327,6 +326,10 @@ class TopLevelPlotsList(BaseModel):
     __root__: list[PlotIdOrFilePath | TopLevelPlots] = Field(
         default_factory=list
     )
+
+
+class ArtifactIdOrFilePath(ConstrainedStr):
+    regex = re.compile(r"^[a-z][a-z0-9-/.]*[a-z0-9]$")
 
 
 class TopLevelArtifacts(BaseModel):

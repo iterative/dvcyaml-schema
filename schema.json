@@ -666,6 +666,18 @@
     "TopLevelArtifacts": {
       "title": "TopLevelArtifacts",
       "type": "object",
+      "patternProperties": {
+        "^[a-z][a-z0-9-/.]*[a-z0-9]$": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/TopLevelArtifactFlags"
+            },
+            {
+              "$ref": "#/definitions/EmptyTopLevelArtifactFlags"
+            }
+          ]
+        }
+      },
       "additionalProperties": {
         "anyOf": [
           {
