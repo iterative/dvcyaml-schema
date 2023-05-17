@@ -55,6 +55,15 @@
         "type": "string"
       },
       "uniqueItems": true
+    },
+    "artifacts": {
+      "title": "Artifacts",
+      "description": "Top level artifacts definition.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/TopLevelArtifacts"
+        }
+      ]
     }
   },
   "additionalProperties": false,
@@ -609,6 +618,57 @@
             "$ref": "#/definitions/TopLevelPlots"
           }
         ]
+      }
+    },
+    "TopLevelArtifactFlags": {
+      "title": "TopLevelArtifactFlags",
+      "type": "object",
+      "properties": {
+        "path": {
+          "title": "Path",
+          "description": "Path to the artifact",
+          "type": "string"
+        },
+        "type": {
+          "title": "Type",
+          "description": "Type of the artifact",
+          "type": "string"
+        },
+        "desc": {
+          "title": "Desc",
+          "description": "Description for the artifact",
+          "type": "string"
+        },
+        "meta": {
+          "title": "Meta",
+          "description": "Custom metadata for the artifact",
+          "type": "object"
+        },
+        "labels": {
+          "title": "Labels",
+          "description": "Labels for the artifact",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "TopLevelArtifacts": {
+      "title": "TopLevelArtifacts",
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9]([a-z0-9-/]*[a-z0-9])?$": {
+          "$ref": "#/definitions/TopLevelArtifactFlags"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/TopLevelArtifactFlags"
       }
     }
   }

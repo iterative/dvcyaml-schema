@@ -1,0 +1,13 @@
+artifacts:
+  myart:
+    path: some/path
+  hello:
+    path: hello.txt
+    type: file
+    desc: "some description"
+    meta:
+      key: value
+      key2: value2
+    labels:
+    - label1
+    - label2
