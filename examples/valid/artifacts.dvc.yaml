@@ -1,11 +1,9 @@
 artifacts:
-  empty:
-  empty_dict: {}
   myart:
-    type: model
+    path: some/path
   hello:
-    type: file
     path: hello.txt
+    type: file
     desc: "some description"
     meta:
       key: value

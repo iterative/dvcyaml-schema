@@ -113,8 +113,8 @@ class EmptyTopLevelPlotFlags(BaseModel):
 
 
 class TopLevelArtifactFlags(BaseModel):
+    path: str = Field(description="Path to the artifact")
     type: str = Field(None, description="Type of the artifact")
-    path: str = Field(None, description="Path to the artifact")
     desc: str = Field(None, description="Description for the artifact")
     meta: dict[str, Any] = Field(
         None, description="Custom metadata for the artifact"
@@ -125,10 +125,6 @@ class TopLevelArtifactFlags(BaseModel):
 
     class Config:
         extra = "forbid"
-
-
-class EmptyTopLevelArtifactFlags(BaseModel):
-    __root__: None = None
 
 
 DEP_DESC = "Path to a dependency (input) file or directory for the stage."
@@ -329,13 +325,13 @@ class TopLevelPlotsList(BaseModel):
 
 
 class ArtifactIdOrFilePath(ConstrainedStr):
-    regex = re.compile(r"^[a-z][a-z0-9-/.]*[a-z0-9]$")
+    regex = re.compile(r"^[a-z0-9]([a-z0-9-/]*[a-z0-9])?$")
 
 
 class TopLevelArtifacts(BaseModel):
     __root__: dict[
         ArtifactIdOrFilePath,
-        TopLevelArtifactFlags | EmptyTopLevelArtifactFlags,
+        TopLevelArtifactFlags,
     ] = Field(default_factory=dict)
 
 
@@ -358,7 +354,7 @@ class DvcYamlModel(BaseModel):
     metrics: set[FilePath] = Field(
         default_factory=set, description="List of metric files"
     )
-    artifacts: TopLevelArtifacts | str = Field(
+    artifacts: TopLevelArtifacts = Field(
         default_factory=dict, description="Top level artifacts definition."
     )
 

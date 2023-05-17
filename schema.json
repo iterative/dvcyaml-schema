@@ -59,12 +59,9 @@
     "artifacts": {
       "title": "Artifacts",
       "description": "Top level artifacts definition.",
-      "anyOf": [
+      "allOf": [
         {
           "$ref": "#/definitions/TopLevelArtifacts"
-        },
-        {
-          "type": "string"
         }
       ]
     }
@@ -627,14 +624,14 @@
       "title": "TopLevelArtifactFlags",
       "type": "object",
       "properties": {
-        "type": {
-          "title": "Type",
-          "description": "Type of the artifact",
-          "type": "string"
-        },
         "path": {
           "title": "Path",
           "description": "Path to the artifact",
+          "type": "string"
+        },
+        "type": {
+          "title": "Type",
+          "description": "Type of the artifact",
           "type": "string"
         },
         "desc": {
@@ -657,36 +654,21 @@
           "uniqueItems": true
         }
       },
+      "required": [
+        "path"
+      ],
       "additionalProperties": false
-    },
-    "EmptyTopLevelArtifactFlags": {
-      "title": "EmptyTopLevelArtifactFlags",
-      "type": "null"
     },
     "TopLevelArtifacts": {
       "title": "TopLevelArtifacts",
       "type": "object",
       "patternProperties": {
-        "^[a-z][a-z0-9-/.]*[a-z0-9]$": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/TopLevelArtifactFlags"
-            },
-            {
-              "$ref": "#/definitions/EmptyTopLevelArtifactFlags"
-            }
-          ]
+        "^[a-z0-9]([a-z0-9-/]*[a-z0-9])?$": {
+          "$ref": "#/definitions/TopLevelArtifactFlags"
         }
       },
       "additionalProperties": {
-        "anyOf": [
-          {
-            "$ref": "#/definitions/TopLevelArtifactFlags"
-          },
-          {
-            "$ref": "#/definitions/EmptyTopLevelArtifactFlags"
-          }
-        ]
+        "$ref": "#/definitions/TopLevelArtifactFlags"
       }
     }
   }
