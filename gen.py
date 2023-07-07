@@ -17,6 +17,10 @@ PlotTemplateName = NewType("PlotTemplateName", str)
 Template = PlotTemplateName | FilePath
 
 
+class Cmds(BaseModel):
+    __root__: list[str]
+
+
 class OutFlags(BaseModel):
     cache: bool | None = Field(True, description="Cache output by DVC")
     persist: bool | None = Field(
@@ -247,7 +251,7 @@ class Stage(BaseModel):
     A named stage of a pipeline.
     """
 
-    cmd: str | list[str] = Field(..., description=CMD_DESC)
+    cmd: str | Cmds = Field(..., description=CMD_DESC)
     wdir: str | None = Field(
         None,
         description="Working directory for the cmd, relative to `dvc.yaml`",

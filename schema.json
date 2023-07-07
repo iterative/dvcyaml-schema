@@ -92,6 +92,13 @@
         ]
       }
     },
+    "Cmds": {
+      "title": "Cmds",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "DepModel": {
       "title": "DepModel",
       "description": "Path to a dependency (input) file or directory for the stage.",
@@ -367,10 +374,7 @@
               "type": "string"
             },
             {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "$ref": "#/definitions/Cmds"
             }
           ]
         },
