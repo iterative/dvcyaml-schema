@@ -14,8 +14,6 @@ PlotColumn = NewType("PlotColumn", str)
 PlotColumns = str | set[PlotColumn]
 PlotTemplateName = NewType("PlotTemplateName", str)
 
-Template = PlotTemplateName | FilePath
-
 
 class OutFlags(BaseModel):
     cache: bool | None = Field(True, description="Cache output by DVC")
@@ -100,7 +98,7 @@ class TopLevelPlotFlags(BaseModel):
     x_label: str = Field(None, description="Default label for the x-axis")
     y_label: str = Field(None, description="Default label for the y-axis")
     title: str = Field(None, description="Default plot title")
-    template: Template = Field(
+    template: str = Field(
         default="linear", description="Default plot template"
     )
 
@@ -362,13 +360,6 @@ class DvcYamlModel(BaseModel):
         title = "dvc.yaml"
         extra = "forbid"
 
-        @staticmethod
-        def schema_extra(schema: dict[str, Any], _) -> None:
-            """Make foreach-do/stage either-or."""
-            for item in ["properties", "stages", "additionalProperties"]:
-                schema = schema.get(item, {})
-            schema["oneOf"] = schema.pop("anyOf")
-
 
 if __name__ == "__main__":
     import sys
@@ -380,7 +371,9 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    json = DvcYamlModel.schema_json(indent=2)
+    # oneOf is expected by the JSON specification but union produces anyOf
+    # https://github.com/pydantic/pydantic/issues/656
+    json = DvcYamlModel.schema_json(indent=2).replace('"anyOf"', '"oneOf"')
     args.outfile.write(json)
     args.outfile.write("\n")
     args.outfile.close()
