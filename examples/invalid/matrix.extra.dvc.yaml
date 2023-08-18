@@ -1,0 +1,7 @@
+stages:
+  stage1:
+    matrix:
+      var: [var1, var2]
+
+    cmd: echo ${item.var}
+    extra: true
