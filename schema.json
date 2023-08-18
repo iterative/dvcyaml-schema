@@ -1,795 +1,1023 @@
 {
-  "title": "dvc.yaml",
-  "type": "object",
-  "properties": {
-    "vars": {
-      "title": "Variables",
-      "description": "List of values for substitution.\n\nMay include any dict or a path to a params file which may be a string or a dict to params in the file).\n\nUse elsewhere in `dvc.yaml` with the `${}` substitution expression.",
-      "allOf": [
-        {
-          "$ref": "#/definitions/Vars"
-        }
-      ]
-    },
-    "stages": {
-      "title": "Stages",
-      "description": "List of stages that form a pipeline.",
-      "type": "object",
+  "$defs": {
+    "CustomParamFileKeys": {
       "additionalProperties": {
-        "oneOf": [
-          {
-            "$ref": "#/definitions/ForeachDo"
-          },
-          {
-            "$ref": "#/definitions/Matrix"
-          },
-          {
-            "$ref": "#/definitions/Stage"
-          }
-        ]
-      }
-    },
-    "plots": {
-      "title": "Plots",
-      "description": "Top level plots definition.",
-      "oneOf": [
-        {
-          "$ref": "#/definitions/TopLevelPlots"
+        "items": {
+          "$ref": "#/$defs/ParamKey"
         },
-        {
-          "$ref": "#/definitions/TopLevelPlotsList"
-        }
-      ]
-    },
-    "params": {
-      "title": "Params",
-      "description": "List of parameter files",
-      "type": "array",
-      "items": {
-        "type": "string"
+        "type": "array",
+        "uniqueItems": true
       },
-      "uniqueItems": true
-    },
-    "metrics": {
-      "title": "Metrics",
-      "description": "List of metric files",
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "uniqueItems": true
-    },
-    "artifacts": {
-      "title": "Artifacts",
-      "description": "Top level artifacts definition.",
-      "allOf": [
-        {
-          "$ref": "#/definitions/TopLevelArtifacts"
-        }
-      ]
-    }
-  },
-  "additionalProperties": false,
-  "definitions": {
-    "VarPath": {
-      "title": "VarPath",
-      "description": "Path to params file with values for substitution.",
-      "type": "string"
-    },
-    "VarDecl": {
-      "title": "VarDecl",
-      "description": "Dict of values for substitution.",
+      "title": "CustomParamFileKeys",
       "type": "object"
-    },
-    "Vars": {
-      "title": "Vars",
-      "type": "array",
-      "items": {
-        "oneOf": [
-          {
-            "$ref": "#/definitions/VarPath"
-          },
-          {
-            "$ref": "#/definitions/VarDecl"
-          }
-        ]
-      }
     },
     "DepModel": {
       "title": "DepModel",
-      "description": "Path to a dependency (input) file or directory for the stage.",
       "type": "string"
     },
     "Dependencies": {
+      "items": {
+        "$ref": "#/$defs/DepModel"
+      },
       "title": "Dependencies",
       "type": "array",
-      "items": {
-        "$ref": "#/definitions/DepModel"
-      },
       "uniqueItems": true
-    },
-    "ParamKey": {
-      "title": "ParamKey",
-      "desc": "Parameter name (dot-separated).",
-      "type": "string"
-    },
-    "CustomParamFileKeys": {
-      "title": "CustomParamFileKeys",
-      "desc": "Path to YAML/JSON/TOML/Python params file.",
-      "type": "object",
-      "additionalProperties": {
-        "type": "array",
-        "items": {
-          "$ref": "#/definitions/ParamKey"
-        },
-        "uniqueItems": true
-      }
     },
     "EmptyParamFileKeys": {
-      "title": "EmptyParamFileKeys",
-      "desc": "Path to YAML/JSON/TOML/Python params file.",
-      "type": "object",
       "additionalProperties": {
         "type": "null"
-      }
-    },
-    "Param": {
-      "title": "Param",
-      "oneOf": [
-        {
-          "$ref": "#/definitions/ParamKey"
-        },
-        {
-          "$ref": "#/definitions/CustomParamFileKeys"
-        },
-        {
-          "$ref": "#/definitions/EmptyParamFileKeys"
-        }
-      ]
-    },
-    "Params": {
-      "title": "Params",
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/Param"
       },
-      "uniqueItems": true
+      "title": "EmptyParamFileKeys",
+      "type": "object"
     },
-    "OutFlags": {
-      "title": "OutFlags",
-      "type": "object",
+    "EmptyTopLevelPlotFlags": {
+      "default": null,
+      "title": "EmptyTopLevelPlotFlags",
+      "type": "null"
+    },
+    "ForeachDo": {
+      "additionalProperties": false,
       "properties": {
-        "cache": {
-          "title": "Cache",
-          "description": "Cache output by DVC",
-          "default": true,
-          "type": "boolean"
-        },
-        "persist": {
-          "title": "Persist",
-          "description": "Persist output between runs",
-          "default": false,
-          "type": "boolean"
-        },
-        "checkpoint": {
-          "title": "Checkpoint",
-          "description": "Indicate that the output is associated with in-code checkpoints",
-          "default": false,
-          "type": "boolean"
-        },
-        "desc": {
-          "title": "Description",
-          "description": "User description for the output",
-          "type": "string"
-        },
-        "type": {
-          "title": "Type",
-          "description": "User assigned type of the output",
-          "type": "string"
-        },
-        "labels": {
-          "title": "Labels",
-          "description": "User assigned labels of the output",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "uniqueItems": true
-        },
-        "meta": {
-          "title": "Meta",
-          "description": "Custom metadata of the output.",
-          "type": "object"
-        },
-        "remote": {
-          "title": "Remote",
-          "description": "Name of the remote to use for pushing/fetching",
-          "type": "string"
-        },
-        "push": {
-          "title": "Push",
-          "description": "Whether the output should be pushed to remote during `dvc push`",
-          "default": true,
-          "type": "boolean"
-        }
-      },
-      "additionalProperties": false
-    },
-    "Out": {
-      "title": "Out",
-      "description": "Path to an output file or dir of the stage.",
-      "oneOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/OutFlags"
-          }
-        }
-      ]
-    },
-    "Outs": {
-      "title": "Outs",
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/Out"
-      },
-      "uniqueItems": true
-    },
-    "PlotFlags": {
-      "title": "PlotFlags",
-      "type": "object",
-      "properties": {
-        "cache": {
-          "title": "Cache",
-          "description": "Cache output by DVC",
-          "default": true,
-          "type": "boolean"
-        },
-        "persist": {
-          "title": "Persist",
-          "description": "Persist output between runs",
-          "default": false,
-          "type": "boolean"
-        },
-        "checkpoint": {
-          "title": "Checkpoint",
-          "description": "Indicate that the output is associated with in-code checkpoints",
-          "default": false,
-          "type": "boolean"
-        },
-        "desc": {
-          "title": "Description",
-          "description": "User description for the output",
-          "type": "string"
-        },
-        "type": {
-          "title": "Type",
-          "description": "User assigned type of the output",
-          "type": "string"
-        },
-        "labels": {
-          "title": "Labels",
-          "description": "User assigned labels of the output",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "uniqueItems": true
-        },
-        "meta": {
-          "title": "Meta",
-          "description": "Custom metadata of the output.",
-          "type": "object"
-        },
-        "remote": {
-          "title": "Remote",
-          "description": "Name of the remote to use for pushing/fetching",
-          "type": "string"
-        },
-        "push": {
-          "title": "Push",
-          "description": "Whether the output should be pushed to remote during `dvc push`",
-          "default": true,
-          "type": "boolean"
-        },
-        "x": {
-          "title": "X",
-          "description": "Default field name to use as x-axis data",
-          "type": "string"
-        },
-        "y": {
-          "title": "Y",
-          "description": "Default field name to use as y-axis data",
-          "type": "string"
-        },
-        "x_label": {
-          "title": "X Label",
-          "description": "Default label for the x-axis",
-          "type": "string"
-        },
-        "y_label": {
-          "title": "Y Label",
-          "description": "Default label for the y-axis",
-          "type": "string"
-        },
-        "title": {
-          "title": "Title",
-          "description": "Default plot title",
-          "type": "string"
-        },
-        "header": {
-          "title": "Header",
-          "description": "Whether the target CSV or TSV has a header or not",
-          "default": false,
-          "type": "boolean"
-        },
-        "template": {
-          "title": "Template",
-          "description": "Default plot template",
-          "type": "string"
-        }
-      },
-      "additionalProperties": false
-    },
-    "Plot": {
-      "title": "Plot",
-      "description": "Path to plots file or dir of the stage.\n\nData files may be JSON/YAML/CSV/TSV.\n\nImage files may be JPEG/GIF/PNG.",
-      "oneOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/PlotFlags"
-          }
-        }
-      ]
-    },
-    "Plots": {
-      "title": "Plots",
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/Plot"
-      },
-      "uniqueItems": true
-    },
-    "Stage": {
-      "title": "Stage",
-      "description": "A named stage of a pipeline.",
-      "type": "object",
-      "properties": {
-        "cmd": {
-          "title": "Cmd",
-          "description": "(Required) Command to run (anything your system terminal can run).\n\nCan be a string or a list of commands.",
+        "foreach": {
           "oneOf": [
             {
               "type": "string"
             },
             {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          ]
-        },
-        "wdir": {
-          "title": "Wdir",
-          "description": "Working directory for the cmd, relative to `dvc.yaml`",
-          "type": "string"
-        },
-        "deps": {
-          "title": "Deps",
-          "description": "List of the dependencies for the stage.",
-          "allOf": [
-            {
-              "$ref": "#/definitions/Dependencies"
-            }
-          ]
-        },
-        "params": {
-          "title": "Params",
-          "description": "List of dot-separated parameter dependency keys to track from `params.yaml`.\n\nMay contain other YAML/JSON/TOML/Python parameter file names, with a sub-list of the param names to track in them (leave empty to include all).",
-          "allOf": [
-            {
-              "$ref": "#/definitions/Params"
-            }
-          ]
-        },
-        "outs": {
-          "title": "Outs",
-          "description": "List of the outputs of the stage.",
-          "allOf": [
-            {
-              "$ref": "#/definitions/Outs"
-            }
-          ]
-        },
-        "metrics": {
-          "title": "Metrics",
-          "description": "List of metrics of the stage written to JSON/TOML/YAML.",
-          "allOf": [
-            {
-              "$ref": "#/definitions/Outs"
-            }
-          ]
-        },
-        "plots": {
-          "title": "Plots",
-          "description": "List of plots of the stage for visualization.\n\nPlots may be written to JSON/YAML/CSV/TSV for data or JPEG/GIF/PNG for images.",
-          "allOf": [
-            {
-              "$ref": "#/definitions/Plots"
-            }
-          ]
-        },
-        "frozen": {
-          "title": "Frozen",
-          "description": "Assume stage as unchanged",
-          "default": false,
-          "type": "boolean"
-        },
-        "always_changed": {
-          "title": "Always Changed",
-          "description": "Assume stage as always changed",
-          "default": false,
-          "type": "boolean"
-        },
-        "vars": {
-          "title": "Vars",
-          "description": "List of stage-specific values for substitution.\n\nMay include any dict or a path to a params file.\n\nUse in the stage with the `${}` substitution expression.",
-          "allOf": [
-            {
-              "$ref": "#/definitions/Vars"
-            }
-          ]
-        },
-        "desc": {
-          "title": "Desc",
-          "description": "Description of the stage",
-          "type": "string"
-        },
-        "meta": {
-          "title": "Meta",
-          "description": "Additional information/metadata"
-        }
-      },
-      "required": [
-        "cmd"
-      ],
-      "additionalProperties": false
-    },
-    "ForeachDo": {
-      "title": "ForeachDo",
-      "type": "object",
-      "properties": {
-        "foreach": {
-          "title": "Foreach",
-          "description": "Iterable to loop through in foreach. Can be a parametrized string, list or a dict.\n\nThe stages will be generated by iterating through this data, by substituting data in the `do` block.",
-          "oneOf": [
-            {
-              "type": "string",
-              "pattern": "^\\${.*?}$"
-            },
-            {
-              "type": "array",
-              "items": {}
+              "items": {},
+              "type": "array"
             },
             {
               "type": "object"
             }
-          ]
+          ],
+          "description": "Iterable to loop through in foreach. Can be a parametrized string, list or a dict.\n\nThe stages will be generated by iterating through this data, by substituting data in the `do` block.",
+          "title": "Foreach"
         },
         "do": {
-          "title": "Do",
-          "description": "Parametrized stage definition that'll be substituted over for each of the value from the foreach data.",
           "allOf": [
             {
-              "$ref": "#/definitions/Stage"
+              "$ref": "#/$defs/Stage"
             }
-          ]
+          ],
+          "description": "Parametrized stage definition that'll be substituted over for each of the value from the foreach data."
         }
       },
       "required": [
         "foreach",
         "do"
       ],
-      "additionalProperties": false
+      "title": "ForeachDo",
+      "type": "object"
     },
     "Matrix": {
-      "title": "Matrix",
-      "description": "A named stage of a pipeline.",
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "cmd": {
-          "title": "Cmd",
-          "description": "(Required) Command to run (anything your system terminal can run).\n\nCan be a string or a list of commands.",
           "oneOf": [
             {
               "type": "string"
             },
             {
-              "type": "array",
               "items": {
                 "type": "string"
-              }
+              },
+              "type": "array"
             }
-          ]
+          ],
+          "description": "(Required) Command to run (anything your system terminal can run).\n\nCan be a string or a list of commands.",
+          "title": "Cmd"
         },
         "wdir": {
-          "title": "Wdir",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
           "description": "Working directory for the cmd, relative to `dvc.yaml`",
-          "type": "string"
+          "title": "Wdir"
         },
         "deps": {
-          "title": "Deps",
-          "description": "List of the dependencies for the stage.",
-          "allOf": [
+          "oneOf": [
             {
-              "$ref": "#/definitions/Dependencies"
+              "$ref": "#/$defs/Dependencies"
+            },
+            {
+              "type": "null"
             }
-          ]
+          ],
+          "default": null,
+          "description": "List of the dependencies for the stage."
         },
         "params": {
-          "title": "Params",
-          "description": "List of dot-separated parameter dependency keys to track from `params.yaml`.\n\nMay contain other YAML/JSON/TOML/Python parameter file names, with a sub-list of the param names to track in them (leave empty to include all).",
-          "allOf": [
+          "oneOf": [
             {
-              "$ref": "#/definitions/Params"
+              "$ref": "#/$defs/Params"
+            },
+            {
+              "type": "null"
             }
-          ]
+          ],
+          "default": null,
+          "description": "List of dot-separated parameter dependency keys to track from `params.yaml`.\n\nMay contain other YAML/JSON/TOML/Python parameter file names, with a sub-list of the param names to track in them (leave empty to include all)."
         },
         "outs": {
-          "title": "Outs",
-          "description": "List of the outputs of the stage.",
-          "allOf": [
+          "oneOf": [
             {
-              "$ref": "#/definitions/Outs"
+              "$ref": "#/$defs/Outs"
+            },
+            {
+              "type": "null"
             }
-          ]
+          ],
+          "default": null,
+          "description": "List of the outputs of the stage."
         },
         "metrics": {
-          "title": "Metrics",
-          "description": "List of metrics of the stage written to JSON/TOML/YAML.",
-          "allOf": [
+          "oneOf": [
             {
-              "$ref": "#/definitions/Outs"
+              "$ref": "#/$defs/Outs"
+            },
+            {
+              "type": "null"
             }
-          ]
+          ],
+          "default": null,
+          "description": "List of metrics of the stage written to JSON/TOML/YAML."
         },
         "plots": {
-          "title": "Plots",
-          "description": "List of plots of the stage for visualization.\n\nPlots may be written to JSON/YAML/CSV/TSV for data or JPEG/GIF/PNG for images.",
-          "allOf": [
+          "oneOf": [
             {
-              "$ref": "#/definitions/Plots"
+              "$ref": "#/$defs/Plots"
+            },
+            {
+              "type": "null"
             }
-          ]
+          ],
+          "default": null,
+          "description": "List of plots of the stage for visualization.\n\nPlots may be written to JSON/YAML/CSV/TSV for data or JPEG/GIF/PNG for images."
         },
         "frozen": {
-          "title": "Frozen",
-          "description": "Assume stage as unchanged",
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
           "default": false,
-          "type": "boolean"
+          "description": "Assume stage as unchanged",
+          "title": "Frozen"
         },
         "always_changed": {
-          "title": "Always Changed",
-          "description": "Assume stage as always changed",
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
           "default": false,
-          "type": "boolean"
+          "description": "Assume stage as always changed",
+          "title": "Always Changed"
         },
         "vars": {
-          "title": "Vars",
-          "description": "List of stage-specific values for substitution.\n\nMay include any dict or a path to a params file.\n\nUse in the stage with the `${}` substitution expression.",
-          "allOf": [
+          "oneOf": [
             {
-              "$ref": "#/definitions/Vars"
+              "$ref": "#/$defs/Vars"
+            },
+            {
+              "type": "null"
             }
-          ]
+          ],
+          "default": null,
+          "description": "List of stage-specific values for substitution.\n\nMay include any dict or a path to a params file.\n\nUse in the stage with the `${}` substitution expression."
         },
         "desc": {
-          "title": "Desc",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
           "description": "Description of the stage",
-          "type": "string"
+          "title": "Desc"
         },
         "meta": {
-          "title": "Meta",
-          "description": "Additional information/metadata"
+          "default": null,
+          "description": "Additional information/metadata",
+          "title": "Meta"
         },
         "matrix": {
-          "title": "Matrix",
-          "description": "Generate stages based on combination of variables.\n\nThe variable can be a list of values, or a parametrized string referencing a list.",
-          "type": "object",
           "additionalProperties": {
             "oneOf": [
               {
-                "type": "array",
-                "items": {}
+                "items": {},
+                "type": "array"
               },
               {
-                "type": "string",
-                "pattern": "^\\${.*?}$"
+                "type": "string"
               }
             ]
-          }
+          },
+          "description": "Generate stages based on combination of variables.\n\nThe variable can be a list of values, or a parametrized string referencing a list.",
+          "title": "Matrix",
+          "type": "object"
         }
       },
       "required": [
         "cmd",
         "matrix"
       ],
-      "additionalProperties": false
+      "title": "Matrix",
+      "type": "object"
     },
-    "X": {
-      "title": "X",
-      "type": "object",
-      "additionalProperties": {
-        "type": "string"
-      }
-    },
-    "Y": {
-      "title": "Y",
-      "type": "object",
-      "additionalProperties": {
-        "oneOf": [
-          {
-            "type": "string"
-          },
-          {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "uniqueItems": true
-          }
-        ]
-      }
-    },
-    "TopLevelPlotFlags": {
-      "title": "TopLevelPlotFlags",
-      "type": "object",
-      "properties": {
-        "x": {
-          "title": "X",
-          "description": "A single column name, or a dictionary of data-source and column pair",
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "$ref": "#/definitions/X"
-            }
-          ]
+    "Out": {
+      "oneOf": [
+        {
+          "type": "string"
         },
-        "y": {
-          "title": "Y",
-          "description": "A single column name, list of columns, or a dictionary of data-source and column pair",
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/OutFlags"
+          },
+          "type": "object"
+        }
+      ],
+      "title": "Out"
+    },
+    "OutFlags": {
+      "additionalProperties": false,
+      "properties": {
+        "cache": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": true,
+          "description": "Cache output by DVC",
+          "title": "Cache"
+        },
+        "persist": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": false,
+          "description": "Persist output between runs",
+          "title": "Persist"
+        },
+        "checkpoint": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": false,
+          "description": "Indicate that the output is associated with in-code checkpoints",
+          "title": "Checkpoint"
+        },
+        "desc": {
           "oneOf": [
             {
               "type": "string"
             },
             {
-              "type": "array",
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "User description for the output",
+          "title": "Description"
+        },
+        "type": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "User assigned type of the output",
+          "title": "Type"
+        },
+        "labels": {
+          "oneOf": [
+            {
               "items": {
                 "type": "string"
               },
+              "type": "array",
               "uniqueItems": true
             },
             {
-              "$ref": "#/definitions/Y"
+              "type": "null"
             }
-          ]
+          ],
+          "description": "User assigned labels of the output",
+          "title": "Labels"
+        },
+        "meta": {
+          "oneOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Custom metadata of the output.",
+          "title": "Meta"
+        },
+        "remote": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Name of the remote to use for pushing/fetching",
+          "title": "Remote"
+        },
+        "push": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": true,
+          "description": "Whether the output should be pushed to remote during `dvc push`",
+          "title": "Push"
+        }
+      },
+      "title": "OutFlags",
+      "type": "object"
+    },
+    "Outs": {
+      "items": {
+        "$ref": "#/$defs/Out"
+      },
+      "title": "Outs",
+      "type": "array",
+      "uniqueItems": true
+    },
+    "Param": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ParamKey"
+        },
+        {
+          "$ref": "#/$defs/CustomParamFileKeys"
+        },
+        {
+          "$ref": "#/$defs/EmptyParamFileKeys"
+        }
+      ],
+      "title": "Param"
+    },
+    "ParamKey": {
+      "title": "ParamKey",
+      "type": "string"
+    },
+    "Params": {
+      "items": {
+        "$ref": "#/$defs/Param"
+      },
+      "title": "Params",
+      "type": "array",
+      "uniqueItems": true
+    },
+    "Plot": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/PlotFlags"
+          },
+          "type": "object"
+        }
+      ],
+      "title": "Plot"
+    },
+    "PlotFlags": {
+      "additionalProperties": false,
+      "properties": {
+        "cache": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": true,
+          "description": "Cache output by DVC",
+          "title": "Cache"
+        },
+        "persist": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": false,
+          "description": "Persist output between runs",
+          "title": "Persist"
+        },
+        "checkpoint": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": false,
+          "description": "Indicate that the output is associated with in-code checkpoints",
+          "title": "Checkpoint"
+        },
+        "desc": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "User description for the output",
+          "title": "Description"
+        },
+        "type": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "User assigned type of the output",
+          "title": "Type"
+        },
+        "labels": {
+          "oneOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "User assigned labels of the output",
+          "title": "Labels"
+        },
+        "meta": {
+          "oneOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Custom metadata of the output.",
+          "title": "Meta"
+        },
+        "remote": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Name of the remote to use for pushing/fetching",
+          "title": "Remote"
+        },
+        "push": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": true,
+          "description": "Whether the output should be pushed to remote during `dvc push`",
+          "title": "Push"
+        },
+        "x": {
+          "default": null,
+          "description": "Default field name to use as x-axis data",
+          "title": "X",
+          "type": "string"
+        },
+        "y": {
+          "default": null,
+          "description": "Default field name to use as y-axis data",
+          "title": "Y",
+          "type": "string"
         },
         "x_label": {
-          "title": "X Label",
+          "default": null,
           "description": "Default label for the x-axis",
+          "title": "X Label",
           "type": "string"
         },
         "y_label": {
-          "title": "Y Label",
+          "default": null,
           "description": "Default label for the y-axis",
+          "title": "Y Label",
           "type": "string"
         },
         "title": {
-          "title": "Title",
+          "default": null,
           "description": "Default plot title",
+          "title": "Title",
           "type": "string"
         },
+        "header": {
+          "default": false,
+          "description": "Whether the target CSV or TSV has a header or not",
+          "title": "Header",
+          "type": "boolean"
+        },
         "template": {
-          "title": "Template",
+          "default": null,
           "description": "Default plot template",
-          "default": "linear",
+          "title": "Template",
           "type": "string"
         }
       },
-      "additionalProperties": false
+      "title": "PlotFlags",
+      "type": "object"
     },
-    "EmptyTopLevelPlotFlags": {
-      "title": "EmptyTopLevelPlotFlags",
-      "type": "null"
-    },
-    "TopLevelPlots": {
-      "title": "TopLevelPlots",
-      "type": "object",
-      "additionalProperties": {
-        "oneOf": [
-          {
-            "$ref": "#/definitions/TopLevelPlotFlags"
-          },
-          {
-            "$ref": "#/definitions/EmptyTopLevelPlotFlags"
-          }
-        ]
-      }
-    },
-    "TopLevelPlotsList": {
-      "title": "TopLevelPlotsList",
-      "type": "array",
+    "Plots": {
       "items": {
-        "oneOf": [
-          {
-            "type": "string"
-          },
-          {
-            "$ref": "#/definitions/TopLevelPlots"
-          }
-        ]
-      }
+        "$ref": "#/$defs/Plot"
+      },
+      "title": "Plots",
+      "type": "array",
+      "uniqueItems": true
+    },
+    "Stage": {
+      "additionalProperties": false,
+      "description": "\n    A named stage of a pipeline.\n    ",
+      "properties": {
+        "cmd": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          ],
+          "description": "(Required) Command to run (anything your system terminal can run).\n\nCan be a string or a list of commands.",
+          "title": "Cmd"
+        },
+        "wdir": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Working directory for the cmd, relative to `dvc.yaml`",
+          "title": "Wdir"
+        },
+        "deps": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Dependencies"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "List of the dependencies for the stage."
+        },
+        "params": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Params"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "List of dot-separated parameter dependency keys to track from `params.yaml`.\n\nMay contain other YAML/JSON/TOML/Python parameter file names, with a sub-list of the param names to track in them (leave empty to include all)."
+        },
+        "outs": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Outs"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "List of the outputs of the stage."
+        },
+        "metrics": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Outs"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "List of metrics of the stage written to JSON/TOML/YAML."
+        },
+        "plots": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Plots"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "List of plots of the stage for visualization.\n\nPlots may be written to JSON/YAML/CSV/TSV for data or JPEG/GIF/PNG for images."
+        },
+        "frozen": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": false,
+          "description": "Assume stage as unchanged",
+          "title": "Frozen"
+        },
+        "always_changed": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": false,
+          "description": "Assume stage as always changed",
+          "title": "Always Changed"
+        },
+        "vars": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Vars"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "List of stage-specific values for substitution.\n\nMay include any dict or a path to a params file.\n\nUse in the stage with the `${}` substitution expression."
+        },
+        "desc": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Description of the stage",
+          "title": "Desc"
+        },
+        "meta": {
+          "default": null,
+          "description": "Additional information/metadata",
+          "title": "Meta"
+        }
+      },
+      "required": [
+        "cmd"
+      ],
+      "title": "Stage",
+      "type": "object"
     },
     "TopLevelArtifactFlags": {
-      "title": "TopLevelArtifactFlags",
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "path": {
-          "title": "Path",
           "description": "Path to the artifact",
+          "title": "Path",
           "type": "string"
         },
         "type": {
-          "title": "Type",
+          "default": null,
           "description": "Type of the artifact",
+          "title": "Type",
           "type": "string"
         },
         "desc": {
-          "title": "Desc",
+          "default": null,
           "description": "Description for the artifact",
+          "title": "Desc",
           "type": "string"
         },
         "meta": {
-          "title": "Meta",
+          "default": null,
           "description": "Custom metadata for the artifact",
+          "title": "Meta",
           "type": "object"
         },
         "labels": {
-          "title": "Labels",
           "description": "Labels for the artifact",
-          "type": "array",
           "items": {
             "type": "string"
           },
+          "title": "Labels",
+          "type": "array",
           "uniqueItems": true
         }
       },
       "required": [
         "path"
       ],
-      "additionalProperties": false
+      "title": "TopLevelArtifactFlags",
+      "type": "object"
     },
     "TopLevelArtifacts": {
+      "additionalProperties": {
+        "$ref": "#/$defs/TopLevelArtifactFlags"
+      },
       "title": "TopLevelArtifacts",
-      "type": "object",
-      "patternProperties": {
-        "^[a-z0-9]([a-z0-9-/]*[a-z0-9])?$": {
-          "$ref": "#/definitions/TopLevelArtifactFlags"
+      "type": "object"
+    },
+    "TopLevelPlotFlags": {
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/X"
+            }
+          ],
+          "default": null,
+          "description": "A single column name, or a dictionary of data-source and column pair",
+          "title": "X"
+        },
+        "y": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            {
+              "$ref": "#/$defs/Y"
+            }
+          ],
+          "description": "A single column name, list of columns, or a dictionary of data-source and column pair",
+          "title": "Y"
+        },
+        "x_label": {
+          "default": null,
+          "description": "Default label for the x-axis",
+          "title": "X Label",
+          "type": "string"
+        },
+        "y_label": {
+          "default": null,
+          "description": "Default label for the y-axis",
+          "title": "Y Label",
+          "type": "string"
+        },
+        "title": {
+          "default": null,
+          "description": "Default plot title",
+          "title": "Title",
+          "type": "string"
+        },
+        "template": {
+          "default": "linear",
+          "description": "Default plot template",
+          "title": "Template",
+          "type": "string"
         }
       },
+      "title": "TopLevelPlotFlags",
+      "type": "object"
+    },
+    "TopLevelPlots": {
       "additionalProperties": {
-        "$ref": "#/definitions/TopLevelArtifactFlags"
-      }
+        "oneOf": [
+          {
+            "$ref": "#/$defs/TopLevelPlotFlags"
+          },
+          {
+            "$ref": "#/$defs/EmptyTopLevelPlotFlags"
+          }
+        ]
+      },
+      "title": "TopLevelPlots",
+      "type": "object"
+    },
+    "TopLevelPlotsList": {
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "$ref": "#/$defs/TopLevelPlots"
+          }
+        ]
+      },
+      "title": "TopLevelPlotsList",
+      "type": "array"
+    },
+    "VarDecl": {
+      "title": "VarDecl",
+      "type": "object"
+    },
+    "VarPath": {
+      "title": "VarPath",
+      "type": "string"
+    },
+    "Vars": {
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/VarPath"
+          },
+          {
+            "$ref": "#/$defs/VarDecl"
+          }
+        ]
+      },
+      "title": "Vars",
+      "type": "array"
+    },
+    "X": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "X",
+      "type": "object"
+    },
+    "Y": {
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        ]
+      },
+      "title": "Y",
+      "type": "object"
     }
-  }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "vars": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/Vars"
+        }
+      ],
+      "description": "List of values for substitution.\n\nMay include any dict or a path to a params file which may be a string or a dict to params in the file).\n\nUse elsewhere in `dvc.yaml` with the `${}` substitution expression.",
+      "title": "Variables"
+    },
+    "stages": {
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/ForeachDo"
+          },
+          {
+            "$ref": "#/$defs/Matrix"
+          },
+          {
+            "$ref": "#/$defs/Stage"
+          }
+        ]
+      },
+      "description": "List of stages that form a pipeline.",
+      "title": "Stages",
+      "type": "object"
+    },
+    "plots": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/TopLevelPlots"
+        },
+        {
+          "$ref": "#/$defs/TopLevelPlotsList"
+        }
+      ],
+      "description": "Top level plots definition.",
+      "title": "Plots"
+    },
+    "params": {
+      "description": "List of parameter files",
+      "items": {
+        "type": "string"
+      },
+      "title": "Params",
+      "type": "array",
+      "uniqueItems": true
+    },
+    "metrics": {
+      "description": "List of metric files",
+      "items": {
+        "type": "string"
+      },
+      "title": "Metrics",
+      "type": "array",
+      "uniqueItems": true
+    },
+    "artifacts": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/TopLevelArtifacts"
+        }
+      ],
+      "description": "Top level artifacts definition."
+    }
+  },
+  "title": "dvc.yaml",
+  "type": "object"
 }

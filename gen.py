@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """schema.json generator."""
-import re
+# import re
 from typing import Any, NewType
 
-from pydantic import BaseModel, ConstrainedStr, Field
+from pydantic import BaseModel, ConfigDict, Field, RootModel
 
 # aliases
 FilePath = NewType("FilePath", str)
@@ -49,9 +49,7 @@ class OutFlags(BaseModel):
         description="Whether the output should be pushed to remote "
         "during `dvc push`",
     )
-
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
 
 class PlotFlags(OutFlags):
@@ -71,13 +69,13 @@ class PlotFlags(OutFlags):
 
 
 # pylint: disable=invalid-name
-class X(BaseModel):
-    __root__: dict[FilePath, PlotColumn] = Field(default_factory=dict)
+class X(RootModel):
+    root: dict[FilePath, PlotColumn] = Field(default_factory=dict)
 
 
 # pylint: disable=invalid-name
-class Y(BaseModel):
-    __root__: dict[FilePath, PlotColumns] = Field(default_factory=dict)
+class Y(RootModel):
+    root: dict[FilePath, PlotColumns] = Field(default_factory=dict)
 
 
 class TopLevelPlotFlags(BaseModel):
@@ -101,13 +99,11 @@ class TopLevelPlotFlags(BaseModel):
     template: str = Field(
         default="linear", description="Default plot template"
     )
-
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
 
-class EmptyTopLevelPlotFlags(BaseModel):
-    __root__: None = None
+class EmptyTopLevelPlotFlags(RootModel):
+    root: None = None
 
 
 class TopLevelArtifactFlags(BaseModel):
@@ -120,58 +116,56 @@ class TopLevelArtifactFlags(BaseModel):
     labels: set[str] = Field(
         default_factory=set, description="Labels for the artifact"
     )
-
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
 
 DEP_DESC = "Path to a dependency (input) file or directory for the stage."
 
 
-class DepModel(BaseModel):
-    __root__: FilePath = Field(..., description=DEP_DESC)
+class DepModel(RootModel):
+    root: FilePath = Field(..., description=DEP_DESC)
 
 
-class Dependencies(BaseModel):
-    __root__: set[DepModel]
+class Dependencies(RootModel):
+    root: set[DepModel]
 
 
-class ParamKey(BaseModel):
-    __root__: str = Field(..., desc="Parameter name (dot-separated).")
+class ParamKey(RootModel):
+    root: str = Field(..., desc="Parameter name (dot-separated).")
 
 
-class CustomParamFileKeys(BaseModel):
-    __root__: dict[FilePath, set[ParamKey]] = Field(
+class CustomParamFileKeys(RootModel):
+    root: dict[FilePath, set[ParamKey]] = Field(
         ..., desc="Path to YAML/JSON/TOML/Python params file."
     )
 
 
-class EmptyParamFileKeys(BaseModel):
-    __root__: dict[FilePath, None] = Field(
+class EmptyParamFileKeys(RootModel):
+    root: dict[FilePath, None] = Field(
         ..., desc="Path to YAML/JSON/TOML/Python params file."
     )
 
 
-class Param(BaseModel):
-    __root__: ParamKey | CustomParamFileKeys | EmptyParamFileKeys
+class Param(RootModel):
+    root: ParamKey | CustomParamFileKeys | EmptyParamFileKeys
 
 
-class Params(BaseModel):
-    __root__: set[Param]
+class Params(RootModel):
+    root: set[Param]
 
 
-class Out(BaseModel):
-    __root__: FilePath | dict[FilePath, OutFlags] = Field(
+class Out(RootModel):
+    root: FilePath | dict[FilePath, OutFlags] = Field(
         ..., description="Path to an output file or dir of the stage."
     )
 
 
-class Outs(BaseModel):
-    __root__: set[Out]
+class Outs(RootModel):
+    root: set[Out]
 
 
-class Metric(BaseModel):
-    __root__: FilePath | dict[FilePath, OutFlags] = Field(
+class Metric(RootModel):
+    root: FilePath | dict[FilePath, OutFlags] = Field(
         ...,
         description="Path to a JSON/TOML/YAML metrics output of the stage.",
     )
@@ -185,31 +179,31 @@ Data files may be JSON/YAML/CSV/TSV.
 Image files may be JPEG/GIF/PNG."""
 
 
-class Plot(BaseModel):
-    __root__: FilePath | dict[FilePath, PlotFlags] = Field(
+class Plot(RootModel):
+    root: FilePath | dict[FilePath, PlotFlags] = Field(
         ..., description=PLOT_DESC
     )
 
 
-class Plots(BaseModel):
-    __root__: set[Plot]
+class Plots(RootModel):
+    root: set[Plot]
 
 
-class VarPath(BaseModel):
-    __root__: str = Field(
+class VarPath(RootModel):
+    root: str = Field(
         ..., description="Path to params file with values for substitution."
     )
 
 
-class VarDecl(BaseModel):
+class VarDecl(RootModel):
     # {"foo" (str) : "foobar" (Any) }
-    __root__: dict[VarKey, Any] = Field(
+    root: dict[VarKey, Any] = Field(
         ..., description="Dict of values for substitution."
     )
 
 
-class Vars(BaseModel):
-    __root__: list[VarPath | VarDecl]
+class Vars(RootModel):
+    root: list[VarPath | VarDecl]
 
 
 STAGE_VARS_DESC = """\
@@ -267,9 +261,7 @@ class Stage(BaseModel):
     desc: str | None = Field(None, description="Description of the stage")
     meta: Any = Field(None, description="Additional information/metadata")
 
-    class Config:
-        allow_mutation = False
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
 
 FOREACH_DESC = """\
@@ -284,8 +276,11 @@ Parametrized stage definition that'll be substituted over for each of the \
 value from the foreach data."""
 
 
-class ParametrizedString(ConstrainedStr):
-    regex = re.compile(r"^\${.*?}$")
+# class ParametrizedString(ConstrainedStr):
+#     regex = re.compile(r"^\${.*?}$")
+
+# FIXME: how to add support for regex str?
+ParametrizedString = str
 
 
 class ForeachDo(BaseModel):
@@ -293,10 +288,7 @@ class ForeachDo(BaseModel):
         ..., description=FOREACH_DESC
     )
     do: Stage = Field(..., description=DO_DESC)
-
-    class Config:
-        allow_mutation = False
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
 
 MATRIX_DESC = """\
@@ -310,10 +302,7 @@ class Matrix(Stage):
     matrix: dict[str, list[Any] | ParametrizedString] = Field(
         ..., description=MATRIX_DESC
     )
-
-    class Config:
-        allow_mutation = False
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
 
 Definition = ForeachDo | Matrix | Stage
@@ -328,24 +317,25 @@ dict to params in the file).
 Use elsewhere in `dvc.yaml` with the `${}` substitution expression."""
 
 
-class TopLevelPlots(BaseModel):
-    __root__: dict[
+class TopLevelPlots(RootModel):
+    root: dict[
         PlotIdOrFilePath, TopLevelPlotFlags | EmptyTopLevelPlotFlags
     ] = Field(default_factory=dict)
 
 
-class TopLevelPlotsList(BaseModel):
-    __root__: list[PlotIdOrFilePath | TopLevelPlots] = Field(
-        default_factory=list
-    )
+class TopLevelPlotsList(RootModel):
+    root: list[PlotIdOrFilePath | TopLevelPlots] = Field(default_factory=list)
 
 
-class ArtifactIdOrFilePath(ConstrainedStr):
-    regex = re.compile(r"^[a-z0-9]([a-z0-9-/]*[a-z0-9])?$")
+# class ArtifactIdOrFilePath(ConstrainedStr):
+#     regex = re.compile(r"^[a-z0-9]([a-z0-9-/]*[a-z0-9])?$")
+
+# FIXME: how to add support for regex str?
+ArtifactIdOrFilePath = str
 
 
-class TopLevelArtifacts(BaseModel):
-    __root__: dict[
+class TopLevelArtifacts(RootModel):
+    root: dict[
         ArtifactIdOrFilePath,
         TopLevelArtifactFlags,
     ] = Field(default_factory=dict)
@@ -373,13 +363,11 @@ class DvcYamlModel(BaseModel):
     artifacts: TopLevelArtifacts = Field(
         default_factory=dict, description="Top level artifacts definition."
     )
-
-    class Config:
-        title = "dvc.yaml"
-        extra = "forbid"
+    model_config = ConfigDict(title="dvc.yaml", extra="forbid")
 
 
 if __name__ == "__main__":
+    import json
     import sys
     from argparse import ArgumentParser, FileType
 
@@ -391,7 +379,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
     # oneOf is expected by the JSON specification but union produces anyOf
     # https://github.com/pydantic/pydantic/issues/656
-    json = DvcYamlModel.schema_json(indent=2).replace('"anyOf"', '"oneOf"')
-    args.outfile.write(json)
+    json_data = DvcYamlModel.model_json_schema()
+    out = json.dumps(json_data, indent=2).replace('"anyOf"', '"oneOf"')
+    args.outfile.write(out)
     args.outfile.write("\n")
     args.outfile.close()

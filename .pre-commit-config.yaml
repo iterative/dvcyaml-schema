@@ -55,7 +55,7 @@ repos:
      - id: pylint
        additional_dependencies: &test_deps
         - jsonschema
-        - pydantic>1,<2
+        - pydantic==2
         - pytest
         - ruamel.yaml
         - types-jsonschema
@@ -74,7 +74,7 @@ repos:
       language: python
       verbose: true
       additional_dependencies:
-        - pydantic>1,<2"
+        - pydantic==2
     - id: test
       name: test-schema
       entry: pytest
