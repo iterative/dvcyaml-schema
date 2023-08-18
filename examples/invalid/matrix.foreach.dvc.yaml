@@ -1,0 +1,9 @@
+stages:
+  stage1:
+    matrix:
+      var: [var1, var2]
+
+    foreach:
+      var: [var1, var2]
+    do:
+      cmd: echo ${var1}

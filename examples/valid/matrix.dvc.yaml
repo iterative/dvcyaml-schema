@@ -1,0 +1,18 @@
+vars:
+- datasets: [dataset1/, dataset2/]
+
+stages:
+  stage1:
+    matrix:
+      processor: [processor1, processor2]
+      dataset: ${datasets}
+      config:
+        - n_estimators: 150
+          max_depth: 20
+        - n_estimators: 120
+          max_depth: 30
+      labels:
+        - [label1, label2, label3]
+        - [labelX, labelY, labelZ]
+
+    cmd: python train.py ${item.processor} ${item.dataset} ${item.config} ${item.labels.0} ${item.labels.1} ${item.labels.2}

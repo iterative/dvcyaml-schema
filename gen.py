@@ -295,10 +295,28 @@ class ForeachDo(BaseModel):
     do: Stage = Field(..., description=DO_DESC)
 
     class Config:
+        allow_mutation = False
         extra = "forbid"
 
 
-Definition = ForeachDo | Stage
+MATRIX_DESC = """\
+Generate stages based on combination of variables.
+
+The variable can be a list of values, or a parametrized string referencing a \
+list."""
+
+
+class Matrix(Stage):
+    matrix: dict[str, list[Any] | ParametrizedString] = Field(
+        ..., description=MATRIX_DESC
+    )
+
+    class Config:
+        allow_mutation = False
+        extra = "forbid"
+
+
+Definition = ForeachDo | Matrix | Stage
 
 
 VARS_DESC = """\
