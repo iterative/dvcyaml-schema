@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """schema.json generator."""
-# import re
-from typing import Any, NewType
+from typing import Annotated, Any, NewType
 
 from pydantic import BaseModel, ConfigDict, Field, RootModel
 
@@ -275,12 +274,7 @@ DO_DESC = """\
 Parametrized stage definition that'll be substituted over for each of the \
 value from the foreach data."""
 
-
-# class ParametrizedString(ConstrainedStr):
-#     regex = re.compile(r"^\${.*?}$")
-
-# FIXME: how to add support for regex str?
-ParametrizedString = str
+ParametrizedString = Annotated[str, Field(pattern=r"^\$\{.*?\}$")]
 
 
 class ForeachDo(BaseModel):
@@ -327,11 +321,9 @@ class TopLevelPlotsList(RootModel):
     root: list[PlotIdOrFilePath | TopLevelPlots] = Field(default_factory=list)
 
 
-# class ArtifactIdOrFilePath(ConstrainedStr):
-#     regex = re.compile(r"^[a-z0-9]([a-z0-9-/]*[a-z0-9])?$")
-
-# FIXME: how to add support for regex str?
-ArtifactIdOrFilePath = str
+ArtifactIdOrFilePath = Annotated[
+    str, Field(pattern=r"^[a-z0-9]([a-z0-9-/]*[a-z0-9])?$")
+]
 
 
 class TopLevelArtifacts(RootModel):
@@ -377,9 +369,9 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
+    json_data = DvcYamlModel.model_json_schema()
     # oneOf is expected by the JSON specification but union produces anyOf
     # https://github.com/pydantic/pydantic/issues/656
-    json_data = DvcYamlModel.model_json_schema()
     out = json.dumps(json_data, indent=2).replace('"anyOf"', '"oneOf"')
     args.outfile.write(out)
     args.outfile.write("\n")

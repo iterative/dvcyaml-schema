@@ -41,6 +41,7 @@
         "foreach": {
           "oneOf": [
             {
+              "pattern": "^\\$\\{.*?\\}$",
               "type": "string"
             },
             {
@@ -225,6 +226,7 @@
                 "type": "array"
               },
               {
+                "pattern": "^\\$\\{.*?\\}$",
                 "type": "string"
               }
             ]
@@ -805,8 +807,10 @@
       "type": "object"
     },
     "TopLevelArtifacts": {
-      "additionalProperties": {
-        "$ref": "#/$defs/TopLevelArtifactFlags"
+      "patternProperties": {
+        "^[a-z0-9]([a-z0-9-/]*[a-z0-9])?$": {
+          "$ref": "#/$defs/TopLevelArtifactFlags"
+        }
       },
       "title": "TopLevelArtifacts",
       "type": "object"
