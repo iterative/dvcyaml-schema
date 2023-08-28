@@ -16,5 +16,5 @@ extension-pkg-whitelist = ["pydantic"]
 enable = ["c-extension-no-member", "no-else-return"]
 disable = [
     "missing-function-docstring", "missing-class-docstring",
-    "too-few-public-methods", "fixme",
+    "too-few-public-methods",
 ]
