@@ -1,7 +1,6 @@
 jsonschema
 pre-commit
 pydantic>1,<2
-pylint
 pytest
 ruamel.yaml
 types-jsonschema

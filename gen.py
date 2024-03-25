@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """schema.json generator."""
+
 import re
 from typing import Any, NewType
 
@@ -18,7 +19,8 @@ PlotTemplateName = NewType("PlotTemplateName", str)
 class OutFlags(BaseModel):
     cache: bool | None = Field(True, description="Cache output by DVC")
     persist: bool | None = Field(
-        False, description="Persist output between runs"
+        False,
+        description="Persist output between runs",
     )
     checkpoint: bool | None = Field(
         False,
@@ -31,7 +33,9 @@ class OutFlags(BaseModel):
         title="Description",
     )
     type: str | None = Field(
-        None, description="User assigned type of the output", title="Type"
+        None,
+        description="User assigned type of the output",
+        title="Type",
     )
     labels: set[str] | None = Field(
         default_factory=set,
@@ -39,10 +43,13 @@ class OutFlags(BaseModel):
         title="Labels",
     )
     meta: dict[str, Any] | None = Field(
-        None, description="Custom metadata of the output.", title="Meta"
+        None,
+        description="Custom metadata of the output.",
+        title="Meta",
     )
     remote: str | None = Field(
-        None, description="Name of the remote to use for pushing/fetching"
+        None,
+        description="Name of the remote to use for pushing/fetching",
     )
     push: bool | None = Field(
         True,
@@ -56,16 +63,19 @@ class OutFlags(BaseModel):
 
 class PlotFlags(OutFlags):
     x: PlotColumn = Field(
-        None, description="Default field name to use as x-axis data"
+        None,
+        description="Default field name to use as x-axis data",
     )
     y: PlotColumn = Field(
-        None, description="Default field name to use as y-axis data"
+        None,
+        description="Default field name to use as y-axis data",
     )
     x_label: str = Field(None, description="Default label for the x-axis")
     y_label: str = Field(None, description="Default label for the y-axis")
     title: str = Field(None, description="Default plot title")
     header: bool = Field(
-        False, description="Whether the target CSV or TSV has a header or not"
+        False,
+        description="Whether the target CSV or TSV has a header or not",
     )
     template: FilePath = Field(None, description="Default plot template")
 
@@ -84,8 +94,7 @@ class TopLevelPlotFlags(BaseModel):
     x: PlotColumn | X = Field(
         None,
         description=(
-            "A single column name, "
-            "or a dictionary of data-source and column pair"
+            "A single column name, or a dictionary of data-source and column pair"
         ),
     )
     y: PlotColumns | Y = Field(
@@ -99,7 +108,8 @@ class TopLevelPlotFlags(BaseModel):
     y_label: str = Field(None, description="Default label for the y-axis")
     title: str = Field(None, description="Default plot title")
     template: str = Field(
-        default="linear", description="Default plot template"
+        default="linear",
+        description="Default plot template",
     )
 
     class Config:
@@ -115,10 +125,12 @@ class TopLevelArtifactFlags(BaseModel):
     type: str = Field(None, description="Type of the artifact")
     desc: str = Field(None, description="Description for the artifact")
     meta: dict[str, Any] = Field(
-        None, description="Custom metadata for the artifact"
+        None,
+        description="Custom metadata for the artifact",
     )
     labels: set[str] = Field(
-        default_factory=set, description="Labels for the artifact"
+        default_factory=set,
+        description="Labels for the artifact",
     )
 
     class Config:
@@ -142,13 +154,15 @@ class ParamKey(BaseModel):
 
 class CustomParamFileKeys(BaseModel):
     __root__: dict[FilePath, set[ParamKey]] = Field(
-        ..., desc="Path to YAML/JSON/TOML/Python params file."
+        ...,
+        desc="Path to YAML/JSON/TOML/Python params file.",
     )
 
 
 class EmptyParamFileKeys(BaseModel):
     __root__: dict[FilePath, None] = Field(
-        ..., desc="Path to YAML/JSON/TOML/Python params file."
+        ...,
+        desc="Path to YAML/JSON/TOML/Python params file.",
     )
 
 
@@ -162,7 +176,8 @@ class Params(BaseModel):
 
 class Out(BaseModel):
     __root__: FilePath | dict[FilePath, OutFlags] = Field(
-        ..., description="Path to an output file or dir of the stage."
+        ...,
+        description="Path to an output file or dir of the stage.",
     )
 
 
@@ -187,7 +202,8 @@ Image files may be JPEG/GIF/PNG."""
 
 class Plot(BaseModel):
     __root__: FilePath | dict[FilePath, PlotFlags] = Field(
-        ..., description=PLOT_DESC
+        ...,
+        description=PLOT_DESC,
     )
 
 
@@ -197,14 +213,16 @@ class Plots(BaseModel):
 
 class VarPath(BaseModel):
     __root__: str = Field(
-        ..., description="Path to params file with values for substitution."
+        ...,
+        description="Path to params file with values for substitution.",
     )
 
 
 class VarDecl(BaseModel):
-    # {"foo" (str) : "foobar" (Any) }
+    # {"foo" (str) : "foobar" (Any) }  # noqa: ERA001
     __root__: dict[VarKey, Any] = Field(
-        ..., description="Dict of values for substitution."
+        ...,
+        description="Dict of values for substitution.",
     )
 
 
@@ -241,9 +259,7 @@ Plots may be written to JSON/YAML/CSV/TSV for data or JPEG/GIF/PNG for images.\
 
 
 class Stage(BaseModel):
-    """
-    A named stage of a pipeline.
-    """
+    """A named stage of a pipeline."""
 
     cmd: str | list[str] = Field(..., description=CMD_DESC)
     wdir: str | None = Field(
@@ -251,17 +267,20 @@ class Stage(BaseModel):
         description="Working directory for the cmd, relative to `dvc.yaml`",
     )
     deps: Dependencies | None = Field(
-        None, description="List of the dependencies for the stage."
+        None,
+        description="List of the dependencies for the stage.",
     )
     params: Params | None = Field(None, description=PARAMS_DESC)
     outs: Outs | None = Field(
-        None, description="List of the outputs of the stage."
+        None,
+        description="List of the outputs of the stage.",
     )
     metrics: Outs | None = Field(None, description=METRICS_DESC)
     plots: Plots | None = Field(None, description=PLOTS_DESC)
     frozen: bool | None = Field(False, description="Assume stage as unchanged")
     always_changed: bool | None = Field(
-        False, description="Assume stage as always changed"
+        False,
+        description="Assume stage as always changed",
     )
     vars: Vars | None = Field(None, description=STAGE_VARS_DESC)
     desc: str | None = Field(None, description="Description of the stage")
@@ -290,7 +309,8 @@ class ParametrizedString(ConstrainedStr):
 
 class ForeachDo(BaseModel):
     foreach: ParametrizedString | list[Any] | dict[str, Any] = Field(
-        ..., description=FOREACH_DESC
+        ...,
+        description=FOREACH_DESC,
     )
     do: Stage = Field(..., description=DO_DESC)
 
@@ -308,7 +328,8 @@ list."""
 
 class Matrix(Stage):
     matrix: dict[str, list[Any] | ParametrizedString] = Field(
-        ..., description=MATRIX_DESC
+        ...,
+        description=MATRIX_DESC,
     )
 
     class Config:
@@ -330,13 +351,14 @@ Use elsewhere in `dvc.yaml` with the `${}` substitution expression."""
 
 class TopLevelPlots(BaseModel):
     __root__: dict[
-        PlotIdOrFilePath, TopLevelPlotFlags | EmptyTopLevelPlotFlags
+        PlotIdOrFilePath,
+        TopLevelPlotFlags | EmptyTopLevelPlotFlags,
     ] = Field(default_factory=dict)
 
 
 class TopLevelPlotsList(BaseModel):
     __root__: list[PlotIdOrFilePath | TopLevelPlots] = Field(
-        default_factory=list
+        default_factory=list,
     )
 
 
@@ -362,16 +384,20 @@ class DvcYamlModel(BaseModel):
         description="List of stages that form a pipeline.",
     )
     plots: TopLevelPlots | TopLevelPlotsList = Field(
-        default_factory=dict, description="Top level plots definition."
+        default_factory=dict,
+        description="Top level plots definition.",
     )
     params: set[FilePath] = Field(
-        default_factory=set, description="List of parameter files"
+        default_factory=set,
+        description="List of parameter files",
     )
     metrics: set[FilePath] = Field(
-        default_factory=set, description="List of metric files"
+        default_factory=set,
+        description="List of metric files",
     )
     artifacts: TopLevelArtifacts = Field(
-        default_factory=dict, description="Top level artifacts definition."
+        default_factory=dict,
+        description="Top level artifacts definition.",
     )
 
     class Config:
@@ -385,7 +411,10 @@ if __name__ == "__main__":
 
     parser = ArgumentParser()
     parser.add_argument(
-        "outfile", nargs="?", type=FileType("w"), default=sys.stdout
+        "outfile",
+        nargs="?",
+        type=FileType("w"),
+        default=sys.stdout,
     )
 
     args = parser.parse_args()
