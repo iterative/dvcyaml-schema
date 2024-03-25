@@ -786,9 +786,6 @@
         "^[a-z0-9]([a-z0-9-/]*[a-z0-9])?$": {
           "$ref": "#/definitions/TopLevelArtifactFlags"
         }
-      },
-      "additionalProperties": {
-        "$ref": "#/definitions/TopLevelArtifactFlags"
       }
     }
   }

@@ -17,8 +17,8 @@ valid_dir = examples_dir / "valid"
 invalid_dir = examples_dir / "invalid"
 
 
-@pytest.fixture
-def schema():
+@pytest.fixture()
+def schema() -> dict:
     return json.loads((root / "schema.json").read_text(encoding="utf-8"))
 
 
@@ -31,11 +31,11 @@ def ids_gen(val: str) -> str:
 
 
 @pytest.mark.parametrize("example", valid_dir.iterdir(), ids=ids_gen)
-def test_valid_examples(schema, example):
+def test_valid_examples(schema: dict, example: Path) -> None:
     jsonschema.validate(yaml.load(example), schema=schema)
 
 
 @pytest.mark.parametrize("example", invalid_dir.iterdir(), ids=ids_gen)
-def test_invalid_examples(schema, example):
+def test_invalid_examples(schema: dict, example: Path) -> None:
     with pytest.raises(jsonschema.ValidationError):
         jsonschema.validate(yaml.load(example), schema=schema)
