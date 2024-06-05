@@ -473,7 +473,7 @@
           "oneOf": [
             {
               "type": "string",
-              "pattern": "^\\${.*?}$"
+              "pattern": "^\\$\\{.*?\\}$"
             },
             {
               "type": "array",
@@ -612,7 +612,7 @@
               },
               {
                 "type": "string",
-                "pattern": "^\\${.*?}$"
+                "pattern": "^\\$\\{.*?\\}$"
               }
             ]
           }
@@ -786,9 +786,6 @@
         "^[a-z0-9]([a-z0-9-/]*[a-z0-9])?$": {
           "$ref": "#/definitions/TopLevelArtifactFlags"
         }
-      },
-      "additionalProperties": {
-        "$ref": "#/definitions/TopLevelArtifactFlags"
       }
     }
   }

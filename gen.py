@@ -304,7 +304,7 @@ value from the foreach data."""
 
 
 class ParametrizedString(ConstrainedStr):
-    regex = re.compile(r"^\${.*?}$")
+    regex = re.compile(r"^\$\{.*?\}$")
 
 
 class ForeachDo(BaseModel):
