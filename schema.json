@@ -473,7 +473,7 @@
           "oneOf": [
             {
               "type": "string",
-              "pattern": "^\\$\\{.*?\\}$"
+              "pattern": "^\\${.*?}$"
             },
             {
               "type": "array",
@@ -612,7 +612,7 @@
               },
               {
                 "type": "string",
-                "pattern": "^\\$\\{.*?\\}$"
+                "pattern": "^\\${.*?}$"
               }
             ]
           }
