@@ -21,7 +21,7 @@ repos:
       - id: sort-simple-yaml
       - id: trailing-whitespace
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 'v0.4.8'
+    rev: 'v0.5.0'
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
@@ -32,7 +32,7 @@ repos:
       - id: codespell
         args: ['--ignore-words-list=fpr']
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.10.0
+    rev: v1.10.1
     hooks:
     - id: mypy
       additional_dependencies: ["jsonschema", "pydantic>1,<2", "pytest", "ruamel.yaml", "types-jsonschema"]
@@ -46,7 +46,7 @@ repos:
       language: python
       verbose: true
       additional_dependencies:
-      - pydantic>1,<2"
+      - "pydantic>1,<2"
     - id: test
       name: test-schema
       entry: pytest
