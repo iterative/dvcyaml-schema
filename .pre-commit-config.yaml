@@ -46,7 +46,7 @@ repos:
       language: python
       verbose: true
       additional_dependencies:
-      - pydantic>1,<2"
+      - "pydantic>1,<2"
     - id: test
       name: test-schema
       entry: pytest
