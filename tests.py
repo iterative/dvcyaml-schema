@@ -17,7 +17,7 @@ valid_dir = examples_dir / "valid"
 invalid_dir = examples_dir / "invalid"
 
 
-@pytest.fixture()
+@pytest.fixture
 def schema() -> dict:
     return json.loads((root / "schema.json").read_text(encoding="utf-8"))
 
