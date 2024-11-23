@@ -67,17 +67,21 @@ https://raw.githubusercontent.com/iterative/dvcyaml-schema/master/schema.json
    The schema is generated using [Pydantic](https://docs.pydantic.dev/latest/) through the [gen.py](gen.py) script. You can make adjustments to the script as needed.
 
    To manually generate the schema, run:
-    ```
+    ```console
     $ ./gen.py schema.json
     ```
 
 4. (Optional) Add [valid](examples/valid) and [invalid](examples/invalid) yaml examples.
 5. Run tests using:
-    ```
+    ```console
     $ pytest
     ```
-6. Commit. `pre-commit` hook should run automatically and format/lint code, regenerate new schema, and run tests.
+6. Git-add and then commit. `pre-commit` hook should run automatically and format/lint code, regenerate new schema, and run tests.
+    ```console
+    $ git add -p
+    $ git commit -m "<message>"
+    ```
  
     If the hook makes additional changes, stage them and attempt the commit again.
 
-7. Send us a pull request. 🤗
+8. Send us a pull request. 🤗
