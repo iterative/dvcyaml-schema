@@ -76,7 +76,7 @@ https://raw.githubusercontent.com/iterative/dvcyaml-schema/master/schema.json
     ```console
     $ pytest
     ```
-6. Git-add and then commit. `pre-commit` hook should run automatically and format/lint code, regenerate new schema, and run tests.
+6. Git-add the changes and then commit. `pre-commit` hook should run automatically and format/lint code, regenerate new schema, and run tests.
     ```console
     $ git add -p
     $ git commit -m "<message>"
