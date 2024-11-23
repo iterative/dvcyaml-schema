@@ -31,13 +31,16 @@ If you're using an older version or encounter any issues, refer to this [guide](
 
 #### Other Editors
 
-`dvc.yaml` schema is available in [JSON Schema Store](https://www.schemastore.org/json/), so it will be pulled automatically.
+`dvc.yaml` schema is available in [JSON Schema Store](https://www.schemastore.org/json/), so it will be pulled automatically in editors that support it
+natively or through plugins.
 
-If you need to add it manually, use the following URL to obtain the latest JSON schema for `dvc.yaml`:
+To add it manually, use the following URL to obtain the latest JSON schema for `dvc.yaml`:
 
 ```
 https://raw.githubusercontent.com/iterative/dvcyaml-schema/master/schema.json
 ```
+
+Check the documentation of your specific editor or IDE for details on how to configure schemas.
 
 ### Important Files:
 
