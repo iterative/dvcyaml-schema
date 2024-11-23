@@ -78,7 +78,7 @@ https://raw.githubusercontent.com/iterative/dvcyaml-schema/master/schema.json
     $ git add -p
     $ git commit -m "<message>"
     ```
- 
+
     If the hook makes additional changes, stage them and attempt the commit again.
 
 6. Send us a pull request. 🤗
