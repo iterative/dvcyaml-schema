@@ -33,15 +33,11 @@ If you're using an older version or encounter any issues, refer to this [guide](
 
 `dvc.yaml` schema is available in [JSON Schema Store](https://www.schemastore.org/json/), so it will be pulled automatically.
 
-
 If you need to add it manually, use the following URL to obtain the latest JSON schema for `dvc.yaml`:
 
 ```
 https://raw.githubusercontent.com/iterative/dvcyaml-schema/master/schema.json
 ```
-
-
-
 
 ### Important Files:
 
