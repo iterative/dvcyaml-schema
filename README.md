@@ -57,12 +57,9 @@ https://raw.githubusercontent.com/iterative/dvcyaml-schema/master/schema.json
     $ python3 -m venv .venv
     $ source .venv/bin/activate
     $ pip install -r requirements.txt
-    ```
-2. Install `pre-commit` hook.
-    ```console
     $ pre-commit install
     ```
-3. Generate the schema.
+2. Generate the schema.
 
    The schema is generated using [Pydantic](https://docs.pydantic.dev/latest/) through the [gen.py](gen.py) script. You can make adjustments to the script as needed.
 
@@ -71,12 +68,12 @@ https://raw.githubusercontent.com/iterative/dvcyaml-schema/master/schema.json
     $ ./gen.py schema.json
     ```
 
-4. (Optional) Add [valid](examples/valid) and [invalid](examples/invalid) yaml examples.
-5. Run tests using:
+3. (Optional) Add [valid](examples/valid) and [invalid](examples/invalid) yaml examples.
+4. Run tests using:
     ```console
     $ pytest
     ```
-6. Git-add the changes and then commit. `pre-commit` hook should run automatically and format/lint code, regenerate new schema, and run tests.
+5. Git-add the changes and then commit. `pre-commit` hook should run automatically and format/lint code, regenerate new schema, and run tests.
     ```console
     $ git add -p
     $ git commit -m "<message>"
@@ -84,4 +81,4 @@ https://raw.githubusercontent.com/iterative/dvcyaml-schema/master/schema.json
  
     If the hook makes additional changes, stage them and attempt the commit again.
 
-7. Send us a pull request. 🤗
+6. Send us a pull request. 🤗
