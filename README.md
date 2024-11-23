@@ -80,4 +80,4 @@ https://raw.githubusercontent.com/iterative/dvcyaml-schema/master/schema.json
  
     If the hook makes additional changes, stage them and attempt the commit again.
 
-8. Send us a pull request. 🤗
+7. Send us a pull request. 🤗
