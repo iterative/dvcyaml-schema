@@ -24,8 +24,7 @@ class OutFlags(BaseModel):
     )
     checkpoint: bool | None = Field(
         False,
-        description="Indicate that the output is associated with "
-        "in-code checkpoints",
+        description="Indicate that the output is associated with in-code checkpoints",
     )
     desc: str | None = Field(
         None,
@@ -53,8 +52,7 @@ class OutFlags(BaseModel):
     )
     push: bool | None = Field(
         True,
-        description="Whether the output should be pushed to remote "
-        "during `dvc push`",
+        description="Whether the output should be pushed to remote during `dvc push`",
     )
 
     class Config:
